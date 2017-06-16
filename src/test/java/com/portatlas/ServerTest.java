@@ -14,7 +14,6 @@ import java.net.ServerSocket;
 
 public class ServerTest {
 
-
     private Server server;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
     private Response OkResponse = Response.builder()
