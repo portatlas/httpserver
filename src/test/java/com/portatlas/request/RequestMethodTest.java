@@ -13,5 +13,4 @@ public class RequestMethodTest {
         assertEquals("POST", RequestMethod.POST);
         assertEquals("PUT", RequestMethod.PUT);
     }
-
 }

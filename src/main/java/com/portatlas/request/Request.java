@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Request {
-
     private String method;
     private String requestTarget;
     private String httpVersion;
@@ -37,6 +36,12 @@ public class Request {
         return requestTarget;
     }
 
+    public String getResource() {
+        String resource = requestTarget.replace("/", "");
+
+        return resource;
+    }
+
     public void setHttpVersion(String httpVersion) {
         this.httpVersion = httpVersion;
     }
@@ -61,13 +66,12 @@ public class Request {
         }
         Request request = (Request) o;
         return Objects.equals(method, request.method) &&
-                Objects.equals(requestTarget, request.requestTarget) &&
-                Objects.equals(httpVersion, request.httpVersion);
+               Objects.equals(requestTarget, request.requestTarget) &&
+               Objects.equals(httpVersion, request.httpVersion);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(method, requestTarget, httpVersion);
     }
-
 }

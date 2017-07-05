@@ -3,7 +3,6 @@ package com.portatlas.response;
 import java.util.HashMap;
 
 public class Response {
-
     private String status;
     private String httpVersion;
     private HashMap<String, String> headers;
@@ -52,5 +51,4 @@ public class Response {
     public static ResponseBuilder builder() {
         return new ResponseBuilder();
     }
-
 }
