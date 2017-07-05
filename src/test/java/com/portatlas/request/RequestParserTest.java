@@ -2,29 +2,22 @@ package com.portatlas.request;
 
 import com.portatlas.HttpVersion;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
 public class RequestParserTest {
 
-    private RequestParser parser;
     private String sampleRequest = "GET / HTTP/1.1\r\nHost: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
     private String headers = "Host: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
     private ByteArrayInputStream sampleRequestInputStream = new ByteArrayInputStream(sampleRequest.getBytes());
 
-    @Before
-    public void setUp() throws Exception {
-        parser = new RequestParser();
-    }
-
     public Request parseRequest() throws IOException {
-        return parser.parseRequest(sampleRequestInputStream);
+        return RequestParser.parseRequest(sampleRequestInputStream);
     }
 
     @Test
@@ -47,13 +40,13 @@ public class RequestParserTest {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(sampleRequestInputStream));
         requestReader.readLine();
 
-        assertEquals(headers, parser.extractHeaders(requestReader));
+        assertEquals(headers, RequestParser.extractHeaders(requestReader));
     }
 
     @Test
     public void testHeadersAreParsed() throws IOException {
         Request request = parseRequest();
-        parser.parseHeaders(request, headers);
+        RequestParser.parseHeaders(request, headers);
 
         assertEquals("en.wikipedia.org:8080", request.getHeaders().get("Host"));
         assertEquals("en-us,en:q=0.5", request.getHeaders().get("Accept-Language"));

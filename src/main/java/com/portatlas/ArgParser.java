@@ -3,7 +3,8 @@ package com.portatlas;
 public class ArgParser {
 
     public int port = 5000;
-    public String dir = System.getProperty("user.dir") + "/public/";
+    public Directory directory = new Directory();
+    public String dir = directory.defaultDir;
 
     public void parseArgs(String[] args) {
         if (args.length > 0 ){
@@ -28,4 +29,5 @@ public class ArgParser {
     public static void printArgs(int port, String dir) {
         System.out.println("Server running on port: " + port + "\nDirectory Path: " + dir );
     }
+
 }

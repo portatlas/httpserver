@@ -1,16 +1,17 @@
 package com.portatlas;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 public class ArgParserTest {
 
     private ArgParser ArgParser;
     private String[] args = new String[]{"-p", "9090", "-d", "/user/path"};
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
     public void setUp() throws Exception {
@@ -18,38 +19,30 @@ public class ArgParserTest {
     }
 
     @Test
-    public void testDefaultPort() throws Exception {
-
+    public void testDefaultPort() {
         assertEquals(5000, ArgParser.getPort());
     }
 
     @Test
-    public void testDefaultDir() throws Exception {
-
-        assertEquals(System.getProperty("user.dir") + "/public/", ArgParser.getDir());
-    }
-
-    @Test
-    public void testParsePortFromArgs() throws Exception {
+    public void testParsePortFromArgs() {
         ArgParser.parseArgs(args);
 
         assertEquals(9090, ArgParser.getPort());
     }
 
     @Test
-    public void testParseDirFromArgs() throws Exception {
+    public void testParseDirFromArgs() {
         ArgParser.parseArgs(args);
 
         assertEquals("/user/path", ArgParser.getDir());
     }
 
     @Test
-    public void testPrintArgsToConsole() throws Exception {
+    public void testPrintArgsToConsole() {
         System.setOut(new PrintStream(outContent));
         ArgParser.printArgs(5000, "/user/path/");
 
         assertEquals("Server running on port: 5000\nDirectory Path: /user/path/\n", outContent.toString());
     }
 
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 }

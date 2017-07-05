@@ -1,7 +1,6 @@
 package com.portatlas.request;
 
 import com.portatlas.HttpVersion;
-import com.portatlas.request.Request;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +46,13 @@ public class RequestTest {
     @Test
     public void testRequestHasARequestTarget() {
         assertEquals("/", request1.getRequestTarget());
+    }
+    
+    @Test
+    public void testGetResourceFromRequestTarget() {
+        request.setRequestTarget("/file.txt");
+
+        assertEquals("file.txt", request.getResource());
     }
 
     @Test
