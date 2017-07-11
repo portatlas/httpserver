@@ -28,7 +28,14 @@ public class DirectoryTest {
 
     @Test
     public void testGetDefaultDir() {
-        assertEquals(System.getProperty("user.dir") + "/public/", dir.defaultDir);
+        assertEquals(System.getProperty("user.dir") + "/public/", dir.pathName);
+    }
+
+    @Test
+    public void testGetDirPassedAsArgs() {
+        Directory notDefaultDir = new Directory(System.getProperty("user.dir"));
+
+        assertEquals(System.getProperty("user.dir"), notDefaultDir.getPathName());
     }
 
     @Test

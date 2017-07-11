@@ -3,7 +3,7 @@ package com.portatlas;
 public class ArgParser {
     public int port = 5000;
     public Directory directory = new Directory();
-    public String dir = directory.defaultDir;
+    public String directoryPath = directory.pathName;
 
     public void parseArgs(String[] args) {
         if (args.length > 0 ){
@@ -11,7 +11,7 @@ public class ArgParser {
                 if (args[i].equals("-p")){
                     port = Integer.parseInt(args[i+1]);
                 } else if (args[i].equals("-d")){
-                    dir = args[i+1];
+                    directoryPath = args[i+1];
                 }
             }
         }
@@ -21,8 +21,8 @@ public class ArgParser {
         return port;
     }
 
-    public String getDir() {
-        return dir;
+    public String getDirectoryPath() {
+        return directoryPath;
     }
 
     public static void printArgs(int port, String dir) {

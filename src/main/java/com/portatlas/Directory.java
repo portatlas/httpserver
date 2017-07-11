@@ -4,8 +4,21 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Directory {
-    public String defaultDir = System.getProperty("user.dir") + "/public/";
+    public String pathName;
     public ArrayList files = new ArrayList();
+
+    public Directory() {
+        this.pathName = System.getProperty("user.dir") + "/public/";
+    }
+
+    public Directory(String directoryPath) {
+        this.pathName = directoryPath;
+        this.files = listFilesForFolder(new File(directoryPath));
+    }
+
+    public String getPathName() {
+        return pathName;
+    }
 
     public ArrayList listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {

@@ -16,22 +16,23 @@ import static org.junit.Assert.assertTrue;
 public class ServerTest {
     private Server server;
     private ResponseSerializer serializer;
+    private ServerSocket serverSocket;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
     @Before
-    public void setUp() {
-        server = new Server();
+    public void setUp() throws IOException {
+        server = new Server(serverSocket);
         server.addRoutes();
         serializer = new ResponseSerializer();
     }
 
-    @Test
-    public void testConfigureServerReturnsServerSocketWithArgsGiven() throws IOException {
-        String[] args = {"-p", "7070"};
-        ServerSocket runningSocket = server.configureServer(args);
-
-        assertEquals(7070, runningSocket.getLocalPort());
-    }
+//    @Test
+//    public void testConfigureServerReturnsServerSocketWithArgsGiven() throws IOException {
+//        String[] args = {"-p", "7070"};
+//        ServerSocket runningSocket = server.configureServer(args);
+//
+//        assertEquals(7070, runningSocket.getLocalPort());
+//    }
 
     @Test
     public void testAddRootRequestAndResponse() {
@@ -75,7 +76,7 @@ public class ServerTest {
 
         assertEquals(StatusCodes.OK, server.router.route(putRequest).getStatus());
     }
-    
+
     @Test
     public void testAddGetFile1AndResponse() {
         Request getFile1Request = new Request(RequestMethod.GET, "/file1" , HttpVersion.CURRENT_VER);
@@ -125,7 +126,7 @@ public class ServerTest {
 
         assertEquals(responseString.toString(), server.handleRequest(getHeadFoobarRequest));
     }
-    
+
     @Test
     public void testPutFileRequestReturnsResponseWithStatusMethodNotAllowed() {
         Request putFileRequest = new Request(RequestMethod.PUT, "/file1" , HttpVersion.CURRENT_VER);

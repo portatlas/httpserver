@@ -1,6 +1,9 @@
 package com.portatlas;
 
 import java.util.HashMap;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class FileReader {
     public static String getMediaType(String resource) {
@@ -18,5 +21,23 @@ public class FileReader {
         int startIndex = fileName.indexOf(".") + 1;
         int endIndex = fileName.length();
         return fileName.substring(startIndex, endIndex);
+    }
+
+    public String getContent(String filepath) {
+        String content = "";
+        File file = new File(filepath);
+
+        try {
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                content += line;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return content;
     }
 }

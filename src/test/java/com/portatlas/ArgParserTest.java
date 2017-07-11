@@ -33,7 +33,7 @@ public class ArgParserTest {
     public void testParseDirFromArgs() {
         ArgParser.parseArgs(args);
 
-        assertEquals("/user/path", ArgParser.getDir());
+        assertEquals("/user/path", ArgParser.getDirectoryPath());
     }
 
     @Test
