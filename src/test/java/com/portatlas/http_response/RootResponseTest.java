@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class RootResponseTest {
     private RootResponse rootResponse;
     private ArrayList<String> files = new ArrayList<String>();
+    private String filePath = System.getProperty("user.dir") + "/public/";
 
 
     @Before

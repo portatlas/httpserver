@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertEquals;
 
+
 public class FileReaderTest {
     private ResourceReader fileReader;
     private File tempFile;
