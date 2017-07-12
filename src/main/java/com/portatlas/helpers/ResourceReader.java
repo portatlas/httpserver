@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class ResourceReader {
     public static String getMediaType(String resource) {
