@@ -1,6 +1,7 @@
 package com.portatlas.response;
 
 import com.portatlas.HttpVersion;
+import com.portatlas.helpers.Converter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,10 +9,12 @@ import static org.junit.Assert.assertEquals;
 
 public class ResponseTest {
     private Response response;
+    private Converter convert;
 
     @Before
     public void setUp() throws Exception {
         response = new Response();
+        convert = new Converter();
     }
 
     @Test
@@ -37,8 +40,15 @@ public class ResponseTest {
 
     @Test
     public void testSetBody() {
-        response.setBody("<html></html>");
+        byte[] body = "<html></html>".getBytes();
+        response.setBody(body);
 
-        assertEquals("<html></html>", response.getBody());
+        assertEquals("<html></html>", convert.bytesToString(response.getBody()));
+    }
+
+    @Test
+    public void testGetBodyWhenNull() {
+        assertEquals(null, response.getBody());
+
     }
 }

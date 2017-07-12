@@ -1,24 +1,21 @@
 package com.portatlas.response;
 
-import com.portatlas.Server;
+import com.portatlas.helpers.Converter;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.net.ServerSocket;
-
 import static org.junit.Assert.assertEquals;
 
 public class FileContentResponseTest {
-    private ServerSocket serverSocket;
-    private Server server = new Server(serverSocket);
     private FileContentResponse fileContentResponse;
     private String dir = System.getProperty("user.dir") + "/public/";
     private String resource = "file1";
+    private Converter convert;
 
     @Before
     public void setUp() {
         fileContentResponse = new FileContentResponse();
+        convert = new Converter();
     }
 
     @Test
@@ -41,30 +38,9 @@ public class FileContentResponseTest {
     }
 
     @Test
-    public void testHeaderContentTypeOfPNG() {
-        String resource = "image.png";
-
-        assertEquals("image/png", fileContentResponse.run(dir, resource).getHeader("Content-Type"));
-    }
-
-    @Test
-    public void testHeaderContentTypeOfJPEG() {
-        String resource = "image.jpeg";
-
-        assertEquals("image/jpeg", fileContentResponse.run(dir, resource).getHeader("Content-Type"));
-    }
-
-    @Test
-    public void testHeaderContentTypeOfGIF() {
-        String resource = "image.gif";
-
-        assertEquals("image/gif", fileContentResponse.run(dir, resource).getHeader("Content-Type"));
-    }
-
-    @Test
     public void testSetBodyBasedOnFilePath() {
 
-        assertEquals("file1 contents", fileContentResponse.run(dir, resource).getBody());
+        assertEquals("file1 contents", convert.bytesToString(fileContentResponse.run(dir, resource).getBody()));
     }
 
 }

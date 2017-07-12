@@ -1,5 +1,7 @@
 package com.portatlas;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,5 +41,12 @@ public class FileReader {
         }
 
         return content;
+    }
+
+    public byte[] getImage(String filepath) throws IOException {
+        File imageFile = new File(filepath);
+        byte[] image = Files.readAllBytes(imageFile.toPath());
+
+        return image;
     }
 }

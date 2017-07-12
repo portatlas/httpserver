@@ -1,10 +1,13 @@
 package com.portatlas.response;
 
-import org.junit.Test;
+import com.portatlas.helpers.Converter;
 
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseBuilderTest {
+
+    Converter convert = new Converter();
 
     @Test
     public void testCreatesResponseLine() {
@@ -43,11 +46,11 @@ public class ResponseBuilderTest {
     }
 
     @Test
-    public void testBuildBody() {
+    public void testBuildBodyWithText() {
         Response response = Response.builder()
-                                    .body("foo content")
+                                    .body("foo content".getBytes())
                                     .build();
 
-        assertEquals("foo content", response.getBody());
+        assertEquals("foo content", convert.bytesToString(response.getBody()));
     }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 public class ResponseBuilder {
     private String statusCode = StatusCodes.OK;
     private HashMap<String, String> headers = new HashMap<String, String>();
-    private String body = "";
+    private byte[] body;
 
     public ResponseBuilder statusCode(String statusCode) {
         this.statusCode = statusCode;
@@ -18,7 +18,7 @@ public class ResponseBuilder {
         return this;
     }
 
-    public ResponseBuilder body(String body) {
+    public ResponseBuilder body(byte[] body) {
         this.body = body;
         return this;
     }

@@ -1,6 +1,6 @@
 package com.portatlas.response;
 
-import com.portatlas.Directory;
+import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,29 +15,35 @@ public class ResponseSerializerTest {
     }
 
     @Test
-    public void testItSerializes200OK() {
+    public void testItSerializes200OK() throws IOException {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .build();
+        byte[] responseWithStatusOKBytes = serializer.serialize(response);
+        String responseString = new String(responseWithStatusOKBytes);
 
-        assertEquals("HTTP/1.1 200 OK" + serializer.CRLF, serializer.serialize(response));
+        assertEquals("HTTP/1.1 200 OK" + serializer.CRLF, responseString);
     }
 
     @Test
-    public void testItSerializes404NotFound() {
+    public void testItSerializes404NotFound() throws IOException {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.NOT_FOUND)
                                     .build();
+        byte[] responseWithStatusNotFound = serializer.serialize(response);
+        String responseString = new String(responseWithStatusNotFound);
 
-        assertEquals("HTTP/1.1 404 Not Found" + serializer.CRLF, serializer.serialize(response));
+        assertEquals("HTTP/1.1 404 Not Found" + serializer.CRLF, responseString);
     }
 
     @Test
-    public void testItSerializesHeaders() {
+    public void testItSerializesHeaders() throws IOException {
         Response response = Response.builder()
                                     .header("Content-Type", "text/plain")
                                     .header("Content-Length", "3")
                                     .build();
+        byte[] responseWithHeaders = serializer.serialize(response);
+        String responseString = new String(responseWithHeaders);
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
                                                    .append(serializer.CRLF)
@@ -47,16 +53,17 @@ public class ResponseSerializerTest {
                                                    .append(serializer.CRLF);
 
         assertEquals(builder.toString(), serializer.serialize(response));
-
     }
 
     @Test
-    public void testItSerializesBody() {
+    public void testItSerializesBodyWithText() throws IOException {
         Response response = Response.builder()
                                     .header("Content-Type", "text/plain")
                                     .header("Content-Length", "3")
-                                    .body("<a href=\"/file1\">file1</a>")
+                                    .body("<a href=\"/file1\">file1</a>".getBytes())
                                     .build();
+        byte[] responseWithHeaderAndBody = serializer.serialize(response);
+        String responseString = new String(responseWithHeaderAndBody);
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
                                                    .append(serializer.CRLF)
@@ -67,7 +74,7 @@ public class ResponseSerializerTest {
                                                    .append(serializer.CRLF)
                                                    .append("<a href=\"/file1\">file1</a>");
 
-        assertEquals(builder.toString(), serializer.serialize(response));
+        assertEquals(builder.toString(), responseString);
 
     }
 }

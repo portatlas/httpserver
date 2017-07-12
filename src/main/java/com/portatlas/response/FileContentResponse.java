@@ -9,7 +9,7 @@ public class FileContentResponse {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .header("Content-Type", fileReader.getMediaType(resource))
-                                    .body(fileReader.getContent(dir + resource))
+                                    .body(fileReader.getContent(dir + resource).getBytes())
                                     .build();
         return response;
     }

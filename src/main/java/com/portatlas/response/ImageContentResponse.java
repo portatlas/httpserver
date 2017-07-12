@@ -1,11 +1,19 @@
 package com.portatlas.response;
 
+import com.portatlas.FileReader;
+import java.io.IOException;
 
 public class ImageContentResponse {
-    public static Response run (String directory, String resource) {
+
+    public static FileReader fileReader = new FileReader();
+
+    public static Response run (String directory, String resource) throws IOException {
+        String filePath = directory + resource;
+
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
-                                    .body("<img src=\"/public/" + resource + "\">\n")
+                                    .header("Content-Type", fileReader.getMediaType(resource))
+                                    .body(fileReader.getImage(filePath))
                                     .build();
 
         return response;

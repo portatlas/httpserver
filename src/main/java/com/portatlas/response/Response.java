@@ -6,7 +6,7 @@ public class Response {
     private String status;
     private String httpVersion;
     private HashMap<String, String> headers;
-    private String body;
+    private byte[] body;
 
     Response() {
         headers = new HashMap<String, String>();
@@ -40,11 +40,11 @@ public class Response {
         headers.put(fieldName, fieldValue);
     }
 
-    public String getBody() {
+    public byte[] getBody() {
         return body;
     }
 
-    public void setBody(String body) {
+    public void setBody(byte[] body) {
         this.body = body;
     }
 

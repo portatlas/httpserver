@@ -1,5 +1,6 @@
 package com.portatlas;
 
+import com.portatlas.helpers.Converter;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.ResponseSerializer;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
     private Server server;
+    private Converter convert;
     private ResponseSerializer serializer;
     private ServerSocket serverSocket;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
@@ -24,6 +26,7 @@ public class ServerTest {
         server = new Server(serverSocket);
         server.addRoutes();
         serializer = new ResponseSerializer();
+        convert = new Converter();
     }
 
 //    @Test
@@ -99,16 +102,16 @@ public class ServerTest {
     }
 
     @Test
-    public void testGetRootReturnsResponseWithStatus200() {
-        StringBuilder responseString = new StringBuilder().append("HTTP/1.1 200 OK")
-                                                          .append(serializer.CRLF)
-                                                          .append(serializer.CRLF);
+    public void testGetRootReturnsResponseWithStatus200() throws IOException {
+        StringBuilder responseWithStatusOK = new StringBuilder();
+        responseWithStatusOK.append("HTTP/1.1 200 OK")
+                            .append(serializer.CRLF);
 
-        assertTrue(server.handleRequest(getRootRequest).contains(responseString));
+        assertTrue(convert.bytesToString(server.handleRequest(getRootRequest)).contains(responseWithStatusOK.toString()));
     }
 
     @Test
-    public void testGetRootRedirectReturnsResponseWithStatus302() {
+    public void testGetRootRedirectReturnsResponseWithStatus302() throws IOException {
         Request getRootRedirectRequest = new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER);
         StringBuilder responseString = new StringBuilder().append("HTTP/1.1 302 Found")
                                                           .append(serializer.CRLF)
@@ -119,20 +122,28 @@ public class ServerTest {
     }
 
     @Test
-    public void testHeadFoobarRequestReturnsResponseWithStatusNotFound() {
+    public void testHeadFoobarRequestReturnsResponseWithStatusNotFound() throws IOException {
         Request getHeadFoobarRequest = new Request(RequestMethod.HEAD, "/foobar" , HttpVersion.CURRENT_VER);
         StringBuilder responseString = new StringBuilder().append("HTTP/1.1 404 Not Found")
                                                           .append(serializer.CRLF);
 
-        assertEquals(responseString.toString(), server.handleRequest(getHeadFoobarRequest));
+        StringBuilder responseWithStatusNotFound = new StringBuilder();
+        responseWithStatusNotFound.append("HTTP/1.1 404 Not Found");
+        responseWithStatusNotFound.append(serializer.CRLF);
+
+        assertEquals(responseWithStatusNotFound.toString(), convert.bytesToString(server.handleRequest(getHeadFoobarRequest)));
     }
 
     @Test
-    public void testPutFileRequestReturnsResponseWithStatusMethodNotAllowed() {
+    public void testPutFileRequestReturnsResponseWithStatusMethodNotAllowed() throws IOException {
         Request putFileRequest = new Request(RequestMethod.PUT, "/file1" , HttpVersion.CURRENT_VER);
         StringBuilder responseString = new StringBuilder().append("HTTP/1.1 405 Method Not Allowed")
                                                           .append(serializer.CRLF);
 
-        assertEquals(responseString.toString(), server.handleRequest(putFileRequest));
+        StringBuilder responseWithStatusNotAllowed = new StringBuilder();
+        responseWithStatusNotAllowed.append("HTTP/1.1 405 Method Not Allowed");
+        responseWithStatusNotAllowed.append(serializer.CRLF);
+
+        assertEquals(responseWithStatusNotAllowed.toString(), convert.bytesToString(server.handleRequest(putFileRequest)));
     }
 }

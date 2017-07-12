@@ -1,5 +1,6 @@
 package com.portatlas;
 
+import com.portatlas.helpers.Converter;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.request.RequestParser;
@@ -7,7 +8,7 @@ import com.portatlas.response.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -16,18 +17,16 @@ public class Server {
     public static Directory directory = new Directory(argParser.getDirectoryPath());
     public static Router router = new Router();
     public static Response response;
+    public static Converter convert = new Converter();
 
     private ServerSocket serverSocket;
 
     public static void main(String[] args) throws IOException {
-//        ServerSocket serverSocket = configureServer(args);
         argParser.parseArgs(args);
         argParser.printArgs(argParser.getPort(), argParser.getDirectoryPath());
 
         Router router = addRoutes();
         ServerSocket serverSocket = new ServerSocket(argParser.getPort());
-
-//        startServer(serverSocket);
 
         Server server = new Server(serverSocket);
 
@@ -38,15 +37,15 @@ public class Server {
         this.serverSocket = serverSocket;
     }
 
-    public static Router addRoutes() {
+    public static Router addRoutes() throws IOException {
 
         router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), RootResponse.run(directory));
         router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), RedirectResponse.run("/"));
         router.addRoute(new Request(RequestMethod.GET, "/file1" , HttpVersion.CURRENT_VER), FileContentResponse.run(directory.getPathName(), "file1"));
         router.addRoute(new Request(RequestMethod.GET, "/text-file.txt" , HttpVersion.CURRENT_VER), FileContentResponse.run(directory.getPathName(), "text-file.txt"));
-        router.addRoute(new Request(RequestMethod.GET, "/image.jpeg" , HttpVersion.CURRENT_VER), FileContentResponse.run(directory.getPathName(), "image.jpeg"));
-        router.addRoute(new Request(RequestMethod.GET, "/image.png" , HttpVersion.CURRENT_VER), FileContentResponse.run(directory.getPathName(), "image.png"));
-        router.addRoute(new Request(RequestMethod.GET, "/image.gif" , HttpVersion.CURRENT_VER), FileContentResponse.run(directory.getPathName(), "image.gif"));
+        router.addRoute(new Request(RequestMethod.GET, "/image.jpeg" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.jpeg"));
+        router.addRoute(new Request(RequestMethod.GET, "/image.png" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.png"));
+        router.addRoute(new Request(RequestMethod.GET, "/image.gif" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.gif"));
         router.addRoute(new Request(RequestMethod.HEAD, "/" , HttpVersion.CURRENT_VER), OkResponse.run());
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options" , HttpVersion.CURRENT_VER), OptionResponse.run("Allow", "GET,HEAD,POST,OPTIONS,PUT"));
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER), OptionResponse.run("Allow", "GET,OPTIONS"));
@@ -61,11 +60,13 @@ public class Server {
             try (Socket socket = serverSocket.accept()) {
                 InputStream requestInputStream = socket.getInputStream();
 
-                Request request = RequestParser.parseRequest(requestInputStream);
-                String httpResponse = handleRequest(request);
+                Request request = parseRequest(requestInputStream);
+                byte[] httpResponse = handleRequest(request);
 
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                out.println(httpResponse);
+                System.out.println(convert.bytesToString(httpResponse));
+
+                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                dataOutputStream.write(httpResponse);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -77,7 +78,7 @@ public class Server {
         return parser.parseRequest(requestInputStream);
     }
 
-    public static String handleRequest(Request request) {
+    public static byte[] handleRequest(Request request) throws IOException {
         ResponseSerializer serializer = new ResponseSerializer();
 
         if (router.hasRoute(request)){
@@ -88,9 +89,10 @@ public class Server {
             response = NotFoundResponse.run();
         }
 
-        String responseString = serializer.serialize(response);
-        System.out.println(responseString);
+        byte[] responseByte = serializer.serialize(response);
 
-        return responseString;
+        return responseByte;
     }
 }
+
+// file output stream
