@@ -20,7 +20,7 @@ public class Server {
         ServerSocket serverSocket = configureServer(args);
         try {
             while(true) {
-                new ClientThread(serverSocket.accept(), router, directory).start();
+                createClientThread(serverSocket).start();
             }
         } finally {
             closeServerSocket(serverSocket);

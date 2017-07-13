@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class ResponseSerializer {
     public static final String CRLF = "\r\n";
+<<<<<<< HEAD
+=======
+    private Converter convert = new Converter();
+>>>>>>> Story#58 Partial Content
 
     public static byte[] serialize(Response response) throws IOException {
         byte[] requestLine = serializeRequestLine(response);

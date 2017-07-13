@@ -7,8 +7,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseBuilderTest {
-    Converter convert = new Converter();
-
     @Test
     public void testCreatesResponseLine() {
         Response response = Response.builder()
