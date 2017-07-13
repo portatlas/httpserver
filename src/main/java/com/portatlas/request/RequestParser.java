@@ -9,7 +9,6 @@ public class RequestParser {
     public static Request parseRequest(InputStream inputStream) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(inputStream));
         String requestLine = requestReader.readLine();
-
         String[] requestLineColl = parseRequestLine(requestLine);
         Integer httpMethod = 0;
         Integer requestURI = 1;

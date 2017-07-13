@@ -1,9 +1,9 @@
 package com.portatlas;
 
 public class ArgParser {
-    public int port = 5000;
-    public Directory directory = new Directory();
-    public String directoryPath = directory.pathName;
+    private int port = 5000;
+    private Directory directory = new Directory();
+    private String directoryPath = directory.pathName;
 
     public void parseArgs(String[] args) {
         if (args.length > 0 ){
@@ -28,5 +28,4 @@ public class ArgParser {
     public static void printArgs(int port, String dir) {
         System.out.println("Server running on port: " + port + "\nDirectory Path: " + dir );
     }
-
 }

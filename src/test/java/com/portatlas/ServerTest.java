@@ -11,35 +11,34 @@ import java.net.ServerSocket;
 
 import org.junit.Before;
 import org.junit.Test;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
     private Server server;
     private Converter convert;
+    private String[] args = {"-p", "7070"};
     private ResponseSerializer serializer;
     private ServerSocket serverSocket;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
     @Before
     public void setUp() throws IOException {
-        server = new Server(serverSocket);
+        server = new Server();
         server.addRoutes();
         serializer = new ResponseSerializer();
         convert = new Converter();
     }
 
-//    @Test
-//    public void testConfigureServerReturnsServerSocketWithArgsGiven() throws IOException {
-//        String[] args = {"-p", "7070"};
-//        ServerSocket runningSocket = server.configureServer(args);
-//
-//        assertEquals(7070, runningSocket.getLocalPort());
-//    }
+    @Test
+    public void testConfigureServerReturnsServerSocketWithArgsGiven() throws IOException {
+        ServerSocket runningSocket = server.configureServer(args);
+
+        assertEquals(7070, runningSocket.getLocalPort());
+    }
 
     @Test
     public void testAddRootRequestAndResponse() {
-
         assertEquals(StatusCodes.OK, server.router.route(getRootRequest).getStatus());
     }
 
@@ -102,36 +101,12 @@ public class ServerTest {
     }
 
     @Test
-    public void testGetRootReturnsResponseWithStatus200() throws IOException {
-        StringBuilder responseWithStatusOK = new StringBuilder();
-        responseWithStatusOK.append("HTTP/1.1 200 OK")
-                            .append(serializer.CRLF);
+    public void testServerSocketIsClosed() throws Exception {
+        ServerSocket runningSocket = Server.configureServer(args);
 
-        assertTrue(convert.bytesToString(server.handleRequest(getRootRequest)).contains(responseWithStatusOK.toString()));
-    }
+        Server.closeServerSocket(runningSocket);
 
-    @Test
-    public void testGetRootRedirectReturnsResponseWithStatus302() throws IOException {
-        Request getRootRedirectRequest = new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER);
-        StringBuilder responseString = new StringBuilder().append("HTTP/1.1 302 Found")
-                                                          .append(serializer.CRLF)
-                                                          .append("Location: /")
-                                                          .append(serializer.CRLF);
-
-        assertEquals(responseString.toString(), server.handleRequest(getRootRedirectRequest));
-    }
-
-    @Test
-    public void testHeadFoobarRequestReturnsResponseWithStatusNotFound() throws IOException {
-        Request getHeadFoobarRequest = new Request(RequestMethod.HEAD, "/foobar" , HttpVersion.CURRENT_VER);
-        StringBuilder responseString = new StringBuilder().append("HTTP/1.1 404 Not Found")
-                                                          .append(serializer.CRLF);
-
-        StringBuilder responseWithStatusNotFound = new StringBuilder();
-        responseWithStatusNotFound.append("HTTP/1.1 404 Not Found");
-        responseWithStatusNotFound.append(serializer.CRLF);
-
-        assertEquals(responseWithStatusNotFound.toString(), convert.bytesToString(server.handleRequest(getHeadFoobarRequest)));
+        assertTrue(runningSocket.isClosed());
     }
 
     @Test

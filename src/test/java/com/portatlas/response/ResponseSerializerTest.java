@@ -19,10 +19,10 @@ public class ResponseSerializerTest {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .build();
-        byte[] responseWithStatusOKBytes = serializer.serialize(response);
+        byte[] responseWithStatusOKBytes = ResponseSerializer.serialize(response);
         String responseString = new String(responseWithStatusOKBytes);
 
-        assertEquals("HTTP/1.1 200 OK" + serializer.CRLF, responseString);
+        assertEquals("HTTP/1.1 200 OK" + ResponseSerializer.CRLF, responseString);
     }
 
     @Test
@@ -30,10 +30,10 @@ public class ResponseSerializerTest {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.NOT_FOUND)
                                     .build();
-        byte[] responseWithStatusNotFound = serializer.serialize(response);
+        byte[] responseWithStatusNotFound = ResponseSerializer.serialize(response);
         String responseString = new String(responseWithStatusNotFound);
 
-        assertEquals("HTTP/1.1 404 Not Found" + serializer.CRLF, responseString);
+        assertEquals("HTTP/1.1 404 Not Found" + ResponseSerializer.CRLF, responseString);
     }
 
     @Test
@@ -42,15 +42,15 @@ public class ResponseSerializerTest {
                                     .header("Content-Type", "text/plain")
                                     .header("Content-Length", "3")
                                     .build();
-        byte[] responseWithHeaders = serializer.serialize(response);
+        byte[] responseWithHeaders = ResponseSerializer.serialize(response);
         String responseString = new String(responseWithHeaders);
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Length: 3")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Type: text/plain")
-                                                   .append(serializer.CRLF);
+                                                   .append(ResponseSerializer.CRLF);
 
         assertEquals(builder.toString(), serializer.serialize(response));
     }
@@ -62,19 +62,18 @@ public class ResponseSerializerTest {
                                     .header("Content-Length", "3")
                                     .body("<a href=\"/file1\">file1</a>".getBytes())
                                     .build();
-        byte[] responseWithHeaderAndBody = serializer.serialize(response);
+        byte[] responseWithHeaderAndBody = ResponseSerializer.serialize(response);
         String responseString = new String(responseWithHeaderAndBody);
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Length: 3")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Type: text/plain")
-                                                   .append(serializer.CRLF)
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("<a href=\"/file1\">file1</a>");
 
         assertEquals(builder.toString(), responseString);
-
     }
 }

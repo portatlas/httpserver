@@ -52,7 +52,7 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testParsesRequestLineAndHeader() throws IOException {
+    public void testRequestLineAndHeadersAreParsed() throws IOException {
         Request parsedRequest = parseRequest();
 
         assertEquals(RequestMethod.GET, parsedRequest.getMethod());

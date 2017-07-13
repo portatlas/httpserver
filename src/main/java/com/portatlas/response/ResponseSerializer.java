@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class ResponseSerializer {
     public static final String CRLF = "\r\n";
-    public Converter convert = new Converter();
+    private Converter convert = new Converter();
 
-    public byte[] serialize(Response response) throws IOException {
+    public static byte[] serialize(Response response) throws IOException {
         byte[] requestLine = serializeRequestLine(response);
         byte[] headers = serializeHeaders(response);
         byte[] fullResponseBytes = new byte[0];
@@ -26,13 +26,13 @@ public class ResponseSerializer {
         return fullResponseBytes;
     }
 
-    public byte[] serializeRequestLine(Response response) {
+    public static byte[] serializeRequestLine(Response response) {
         String statusLine = "HTTP/1.1 " + response.getStatus() + CRLF;
 
         return statusLine.getBytes();
     }
 
-    private byte[] serializeHeaders(Response response) {
+    private static byte[] serializeHeaders(Response response) {
         StringBuilder headersString = new StringBuilder();
         for (Map.Entry<String, String> header: response.getHeaders().entrySet()) {
             headersString.append(header.getKey() + ": " + header.getValue() + CRLF);
@@ -43,7 +43,7 @@ public class ResponseSerializer {
         return headers.getBytes();
     }
 
-    private byte[] buildRequestLineAndHeaderResponseBytes(byte[] requestLine, byte[] headers) throws IOException {
+    private static byte[] buildRequestLineAndHeaderResponseBytes(byte[] requestLine, byte[] headers) throws IOException {
         ByteArrayOutputStream responseByte = new ByteArrayOutputStream();
 
         responseByte.write(requestLine);
@@ -52,7 +52,7 @@ public class ResponseSerializer {
         return responseByte.toByteArray();
     }
 
-    private byte[] buildFullResponseBytes(byte[] requestLineAndHeader, byte[] body) throws IOException {
+    private static byte[] buildFullResponseBytes(byte[] requestLineAndHeader, byte[] body) throws IOException {
         ByteArrayOutputStream responseByte = new ByteArrayOutputStream();
 
         responseByte.write(requestLineAndHeader);

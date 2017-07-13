@@ -32,13 +32,6 @@ public class DirectoryTest {
     }
 
     @Test
-    public void testGetDirPassedAsArgs() {
-        Directory notDefaultDir = new Directory(System.getProperty("user.dir"));
-
-        assertEquals(System.getProperty("user.dir"), notDefaultDir.getPathName());
-    }
-
-    @Test
     public void testPrintFileInDir() {
         List<String> files = Arrays.asList("file1", "file2");
         assertEquals(files , dir.listFilesForFolder(folder));

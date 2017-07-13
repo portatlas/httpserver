@@ -7,5 +7,4 @@ public class NotFoundResponse {
                                     .build();
         return response;
     }
-
 }
