@@ -40,6 +40,8 @@ public class Server {
         router.addRoute(new Request(RequestMethod.GET, "/image.jpeg" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.jpeg"));
         router.addRoute(new Request(RequestMethod.GET, "/image.png" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.png"));
         router.addRoute(new Request(RequestMethod.GET, "/image.gif" , HttpVersion.CURRENT_VER), ImageContentResponse.run(directory.getPathName(), "image.gif"));
+        router.addRoute(new Request(RequestMethod.GET, "/tea" , HttpVersion.CURRENT_VER), OkResponse.run());
+        router.addRoute(new Request(RequestMethod.GET, "/coffee" , HttpVersion.CURRENT_VER), TeapotResponse.run());
         router.addRoute(new Request(RequestMethod.HEAD, "/" , HttpVersion.CURRENT_VER), OkResponse.run());
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options" , HttpVersion.CURRENT_VER), OptionResponse.run("Allow", "GET,HEAD,POST,OPTIONS,PUT"));
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER), OptionResponse.run("Allow", "GET,OPTIONS"));
