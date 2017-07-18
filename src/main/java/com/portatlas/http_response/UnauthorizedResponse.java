@@ -9,6 +9,7 @@ public class UnauthorizedResponse implements HttpResponse {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.UNAUTHORIZED)
                                     .header(HeaderName.WWW_AUTH, "Basic")
+                                    .header("WWW-Authenticate", "Basic")
                                     .body("Request requires authentication".getBytes())
                                     .build();
         return response;

@@ -1,14 +1,14 @@
 package com.portatlas.helpers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.portatlas.http_constants.HeaderName;
 import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.test_helpers.FileHelper;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Rule;

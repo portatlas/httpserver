@@ -47,3 +47,4 @@ public class AuthenticationTest {
         assertFalse(Authentication.isValidCredentials(invalidAuthorizationValue));
     }
 }
+}
