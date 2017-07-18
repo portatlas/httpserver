@@ -3,6 +3,7 @@ package com.portatlas.http_response;
 import com.portatlas.helpers.Converter;
 import com.portatlas.http_constants.HeaderName;
 import com.portatlas.response.StatusCodes;
+import com.portatlas.test_helpers.FileHelper;
 
 import java.io.IOException;
 
@@ -10,7 +11,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import com.portatlas.test_helpers.FileHelper;
 import static org.junit.Assert.assertEquals;
 
 public class FileContentResponseTest {

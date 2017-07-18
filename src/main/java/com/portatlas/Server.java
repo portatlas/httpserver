@@ -3,6 +3,7 @@ package com.portatlas;
 import com.portatlas.http_constants.HeaderName;
 import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.http_response.*;
+import com.portatlas.helpers.ArgParser;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 
@@ -26,6 +27,10 @@ public class Server {
         }
     }
 
+    public static ClientThread createClientThread(ServerSocket serverSocket) throws IOException {
+        return new ClientThread(serverSocket.accept(), router, directory);
+    }
+
     public static ServerSocket configureServer(String[] args) throws IOException {
         argParser.parseArgs(args);
         argParser.printArgs(argParser.getPort(), argParser.getDirectoryPath());
@@ -47,8 +52,11 @@ public class Server {
         router.addRoute(new Request(RequestMethod.HEAD, "/" , HttpVersion.CURRENT_VER), new OkResponse());
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options" , HttpVersion.CURRENT_VER), new OptionResponse(HeaderName.ALLOW, "GET,HEAD,POST,OPTIONS,PUT"));
         router.addRoute(new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER), new OptionResponse(HeaderName.ALLOW, "GET,OPTIONS"));
+        router.addRoute(new Request(RequestMethod.GET, "/form" , HttpVersion.CURRENT_VER), new FileContentResponse(directory.getPathName(), "form"));
         router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER), new OkResponse());
         router.addRoute(new Request(RequestMethod.PUT, "/form" , HttpVersion.CURRENT_VER), new OkResponse());
+        router.addRoute(new Request(RequestMethod.DELETE, "/form" , HttpVersion.CURRENT_VER), new DeleteResponse(directory.getPathName(),"form"));
+        router.addRoute(new Request(RequestMethod.GET, "/logs" , HttpVersion.CURRENT_VER), new UnauthorizedResponse());
         return router;
     }
 

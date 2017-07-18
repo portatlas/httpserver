@@ -3,7 +3,6 @@ package com.portatlas.http_response;
 import com.portatlas.helpers.Converter;
 import com.portatlas.response.StatusCodes;
 
-import com.portatlas.http_response.TeapotResponse;
 import com.portatlas.response.StatusCodes;
 import org.junit.Assert;
 import org.junit.Before;

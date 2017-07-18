@@ -1,4 +1,6 @@
-package com.portatlas;
+package com.portatlas.helpers;
+
+import com.portatlas.test_helpers.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,11 +9,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import com.portatlas.test_helpers.FileHelper;
 import static org.junit.Assert.assertEquals;
 
 public class FileReaderTest {
-    private FileReader fileReader;
+    private ResourceReader fileReader;
     private File tempFile;
 
     @Rule
@@ -19,7 +20,7 @@ public class FileReaderTest {
 
     @Before
     public void setUp() throws IOException {
-        fileReader = new FileReader();
+        fileReader = new ResourceReader();
         tempFile = FileHelper.createTempFileWithContent(tempFolder);
     }
 
@@ -37,6 +38,14 @@ public class FileReaderTest {
     public void testGetContentOfFileFromFilePath() throws IOException {
         String expectedContent = new String("testing\n".getBytes());
         String parsedContent = new String(fileReader.getContent(tempFile.getPath()));
+
+        assertEquals(expectedContent, parsedContent);
+    }
+
+    @Test
+    public void testGetContentOfFileWhenFileDoesNotExist() throws IOException {
+        String expectedContent = new String("".getBytes());
+        String parsedContent = new String(fileReader.getContent(tempFolder.getRoot().getPath() + "/doesnotexist"));
 
         assertEquals(expectedContent, parsedContent);
     }

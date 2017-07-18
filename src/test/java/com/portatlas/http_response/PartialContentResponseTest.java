@@ -1,11 +1,11 @@
 package com.portatlas.http_response;
 
 import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.response.StatusCodes;
+import com.portatlas.test_helpers.FileHelper;
 import com.portatlas.helpers.Converter;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.StatusCodes;
-import com.portatlas.test_helpers.FileHelper;
 
 import java.io.File;
 import java.io.IOException;

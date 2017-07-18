@@ -1,11 +1,11 @@
-package com.portatlas;
+package com.portatlas.helpers;
 
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
 
-public class FileReader {
+public class ResourceReader {
     public static String getMediaType(String resource) {
         String fileExtension = getFileExtension(resource);
         HashMap<String, String> fileMediaType = new HashMap<String, String> () {{
@@ -26,10 +26,12 @@ public class FileReader {
     public static byte[] getContent(String filepath) {
         byte[] content = new byte[0];
         File targetFile = new File(filepath);
-        try {
-            content = Files.readAllBytes(targetFile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (targetFile.isFile()){
+            try {
+                content = Files.readAllBytes(targetFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return content;
     }

@@ -1,6 +1,5 @@
 package com.portatlas.helpers;
 
-import com.portatlas.FileReader;
 import com.portatlas.http_constants.HeaderName;
 import com.portatlas.request.Request;
 
@@ -24,7 +23,7 @@ public class ContentRange {
     }
 
     public static byte[] buildPartialContent(String filePath, String rangeRequested, int lengthOfContent) {
-        byte[] fullContent = FileReader.getContent(filePath);
+        byte[] fullContent = ResourceReader.getContent(filePath);
         int[] rangeRequired = getRange(rangeRequested, lengthOfContent);
         int start = rangeRequired[0];
         int end = rangeRequired[1];

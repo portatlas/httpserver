@@ -7,6 +7,7 @@ import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.http_response.RootResponse;
 import com.portatlas.http_response.RedirectResponse;
+import com.portatlas.http_response.FormResponse;
 import com.portatlas.response.ResponseSerializer;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import com.portatlas.test_helpers.FileHelper;
 import org.junit.rules.TemporaryFolder;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -26,6 +28,7 @@ public class ControllerTest {
     private Directory directory;
     private File tempFile;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    private Request testRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -35,8 +38,10 @@ public class ControllerTest {
         controller = new Controller();
         tempFile = FileHelper.createTempFileWithContent(tempFolder);
         directory = new Directory(tempFolder.getRoot().getPath());
+        testRequest.setBody("hello");
         router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), new RootResponse(directory.files));
         router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), new RedirectResponse());
+        router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER), new FormResponse(testRequest, directory));
     }
 
     @Test
@@ -93,5 +98,16 @@ public class ControllerTest {
                                  .append(ResponseSerializer.CRLF);
 
         assertTrue(Converter.bytesToString(controller.handleRequest(getPartialContent, router, directory)).contains(responseForPartialContent));
+    }
+
+    @Test
+    public void testPostFormRequestReturnsResponseWithStatus200() throws IOException {
+        Request putFormRequest = new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER);
+        putFormRequest.setBody("hello");
+        StringBuilder responseWithStatusOK = new StringBuilder();
+        responseWithStatusOK.append("HTTP/1.1 200 OK")
+                            .append(ResponseSerializer.CRLF);
+
+        assertTrue(Converter.bytesToString(controller.handleRequest(putFormRequest, router, directory)).contains(responseWithStatusOK.toString()));
     }
 }

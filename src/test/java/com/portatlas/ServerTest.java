@@ -1,41 +1,50 @@
 package com.portatlas;
 
-import com.portatlas.helpers.Converter;
 import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.ResponseSerializer;
 import com.portatlas.response.StatusCodes;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import com.portatlas.mocks.MockServerSocket;
+import com.portatlas.mocks.MockSocket;
 
 import org.junit.Before;
 import org.junit.Test;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
     private Server server;
-    private Converter convert;
     private String[] args = {"-p", "7070"};
-    private ResponseSerializer serializer;
-    private ServerSocket serverSocket;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    private MockSocket socket;
+    private MockServerSocket serverSocket;
 
     @Before
     public void setUp() throws IOException {
         server = new Server();
         server.addRoutes();
-        serializer = new ResponseSerializer();
-        convert = new Converter();
+        socket = new MockSocket();
+        serverSocket = new MockServerSocket();
+    }
+
+    @Test
+    public void testCreateClientThreadCreatesANewClientThreadInstance() throws IOException {
+        Directory directory = new Directory();
+        Router router = new Router();
+        ClientThread clientThread = new ClientThread(socket, router, directory);
+
+        assertEquals(clientThread.getClass(), Server.createClientThread(serverSocket).getClass());
     }
 
     @Test
     public void testConfigureServerReturnsServerSocketWithArgsGiven() throws IOException {
-        ServerSocket runningSocket = server.configureServer(args);
+        String[] args = {"-p", "7071"};
+        ServerSocket runningSocket = Server.configureServer(args);
 
-        assertEquals(7070, runningSocket.getLocalPort());
+        assertEquals(7071, runningSocket.getLocalPort());
     }
 
     @Test
@@ -103,7 +112,7 @@ public class ServerTest {
 
     @Test
     public void testServerSocketIsClosed() throws Exception {
-        ServerSocket runningSocket = Server.configureServer(args);
+        ServerSocket runningSocket = new MockServerSocket();
         Server.closeServerSocket(runningSocket);
 
         assertTrue(runningSocket.isClosed());

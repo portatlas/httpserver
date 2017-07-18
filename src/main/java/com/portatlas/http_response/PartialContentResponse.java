@@ -1,6 +1,6 @@
 package com.portatlas.http_response;
 
-import com.portatlas.FileReader;
+import com.portatlas.helpers.ResourceReader;
 import com.portatlas.helpers.ContentRange;
 import com.portatlas.request.Request;
 import com.portatlas.response.Response;
@@ -20,7 +20,7 @@ public class PartialContentResponse implements HttpResponse {
     public Response run() {
         String filePath = directoryPath + resource;
         String rangeRequested = ContentRange.getRangeRequested(request);
-        int lengthOfContent = FileReader.getContentLength(filePath);
+        int lengthOfContent = ResourceReader.getContentLength(filePath);
 
         Response response = Response.builder()
                                     .statusCode(StatusCodes.PARTIAL_CONTENT)

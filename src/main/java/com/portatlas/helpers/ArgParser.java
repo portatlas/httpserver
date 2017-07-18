@@ -1,4 +1,6 @@
-package com.portatlas;
+package com.portatlas.helpers;
+
+import com.portatlas.Directory;
 
 public class ArgParser {
     private int port = 5000;

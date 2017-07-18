@@ -1,6 +1,6 @@
 package com.portatlas.http_response;
 
-import com.portatlas.FileReader;
+import com.portatlas.helpers.ResourceReader;
 import com.portatlas.http_constants.HeaderName;
 import com.portatlas.response.Response;
 import com.portatlas.response.StatusCodes;
@@ -17,8 +17,8 @@ public class FileContentResponse implements HttpResponse {
     public Response run() {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
-                                    .header(HeaderName.CONTENT_TYPE, FileReader.getMediaType(resource))
-                                    .body(FileReader.getContent(directoryPath + resource))
+                                    .header(HeaderName.CONTENT_TYPE, ResourceReader.getMediaType(resource))
+                                    .body(ResourceReader.getContent(directoryPath + resource))
                                     .build();
         return response;
     }

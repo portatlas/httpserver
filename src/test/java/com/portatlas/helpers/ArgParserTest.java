@@ -1,4 +1,4 @@
-package com.portatlas;
+package com.portatlas.helpers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -8,38 +8,38 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ArgParserTest {
-    private ArgParser ArgParser;
+    private ArgParser argParser;
     private String[] args = new String[]{"-p", "9090", "-d", "/user/path"};
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
     public void setUp() throws Exception {
-        ArgParser = new ArgParser();
+        argParser = new ArgParser();
     }
 
     @Test
     public void testDefaultPort() {
-        assertEquals(5000, ArgParser.getPort());
+        assertEquals(5000, argParser.getPort());
     }
 
     @Test
     public void testParsePortFromArgs() {
-        ArgParser.parseArgs(args);
+        argParser.parseArgs(args);
 
-        assertEquals(9090, ArgParser.getPort());
+        assertEquals(9090, argParser.getPort());
     }
 
     @Test
     public void testParseDirFromArgs() {
-        ArgParser.parseArgs(args);
+        argParser.parseArgs(args);
 
-        assertEquals("/user/path", ArgParser.getDirectoryPath());
+        assertEquals("/user/path", argParser.getDirectoryPath());
     }
 
     @Test
     public void testPrintArgsToConsole() {
         System.setOut(new PrintStream(outContent));
-        ArgParser.printArgs(5000, "/user/path/");
+        argParser.printArgs(5000, "/user/path/");
 
         assertEquals("Server running on port: 5000\nDirectory Path: /user/path/\n", outContent.toString());
     }
