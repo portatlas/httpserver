@@ -1,7 +1,10 @@
-package com.portatlas.response;
+package com.portatlas.http_response;
 
-public class TeapotResponse {
-    public static Response run() {
+import com.portatlas.response.Response;
+import com.portatlas.response.StatusCodes;
+
+public class TeapotResponse implements HttpResponse {
+    public Response run() {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.TEA_POT)
                                     .body("I'm a teapot".getBytes())

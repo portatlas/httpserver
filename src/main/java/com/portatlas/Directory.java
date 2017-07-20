@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Directory {
     public String pathName;
-    public ArrayList files = new ArrayList();
+    public ArrayList<String> files = new ArrayList<String>();
 
     public Directory() {
         this.pathName = System.getProperty("user.dir") + "/public/";
@@ -32,6 +32,6 @@ public class Directory {
     }
 
     public boolean hasFile(String fileName) {
-        return (files.contains(fileName)) ? true: false;
+        return (files.contains(fileName));
     }
 }

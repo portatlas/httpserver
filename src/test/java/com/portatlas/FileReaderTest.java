@@ -7,8 +7,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import com.portatlas.TestHelpers.FileHelper;
-
+import com.portatlas.test_helpers.FileHelper;
 import static org.junit.Assert.assertEquals;
 
 public class FileReaderTest {

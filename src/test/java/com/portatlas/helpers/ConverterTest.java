@@ -7,9 +7,8 @@ public class ConverterTest {
 
     @Test
     public void testConvertsByteArraysToString() throws Exception {
-        Converter convert = new Converter();
         byte[] bytes = "hello".getBytes();
 
-        assertEquals("hello", convert.bytesToString(bytes));
+        assertEquals("hello", Converter.bytesToString(bytes));
     }
 }

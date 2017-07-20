@@ -23,7 +23,7 @@ public class FileReader {
         return fileName.substring(startIndex, endIndex);
     }
 
-    public byte[] getContent(String filepath) {
+    public static byte[] getContent(String filepath) {
         byte[] content = new byte[0];
         File targetFile = new File(filepath);
         try {
@@ -34,7 +34,7 @@ public class FileReader {
         return content;
     }
 
-    public int getContentLength(String filepath) {
+    public static int getContentLength(String filepath) {
         byte[] content = getContent(filepath);
         return content.length;
     }

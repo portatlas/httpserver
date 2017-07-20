@@ -1,11 +1,13 @@
 package com.portatlas;
 
 import com.portatlas.helpers.Converter;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.RedirectResponse;
+import com.portatlas.http_response.RootResponse;
+import com.portatlas.http_response.RedirectResponse;
 import com.portatlas.response.ResponseSerializer;
-import com.portatlas.response.RootResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +15,8 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import com.portatlas.test_helpers.FileHelper;
 import org.junit.rules.TemporaryFolder;
-import com.portatlas.TestHelpers.FileHelper;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -31,10 +33,10 @@ public class ControllerTest {
     @Before
     public void setUp() throws IOException {
         controller = new Controller();
-                tempFile = FileHelper.createTempFileWithContent(tempFolder);
+        tempFile = FileHelper.createTempFileWithContent(tempFolder);
         directory = new Directory(tempFolder.getRoot().getPath());
-        router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), RootResponse.run(directory.files));
-        router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), RedirectResponse.run("/"));
+        router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), new RootResponse(directory.files));
+        router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), new RedirectResponse());
     }
 
     @Test
@@ -84,7 +86,7 @@ public class ControllerTest {
     @Test
     public void testRangeRequestReturnsResponseWithStatusPartialContent() throws Exception {
         Request getPartialContent = new Request(RequestMethod.GET, "/test_temp_file.txt", HttpVersion.CURRENT_VER);
-        getPartialContent.addHeader("Range", "bytes=0-4");
+        getPartialContent.addHeader(HeaderName.RANGE, "bytes=0-4");
 
         StringBuilder responseForPartialContent = new StringBuilder();
         responseForPartialContent.append("HTTP/1.1 206 Partial Content")

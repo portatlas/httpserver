@@ -1,4 +1,4 @@
-package com.portatlas.TestHelpers;
+package com.portatlas.test_helpers;
 
 import java.io.File;
 import java.io.FileOutputStream;

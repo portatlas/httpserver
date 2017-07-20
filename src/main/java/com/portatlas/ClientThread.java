@@ -7,6 +7,7 @@ import com.portatlas.request.RequestParser;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class ClientThread extends Thread {
@@ -25,7 +26,8 @@ public class ClientThread extends Thread {
             InputStream requestInputStream = socket.getInputStream();
             Request request = buildRequestFromInputStream(requestInputStream);
             byte[] httpResponse = Controller.handleRequest(request, router, directory);
-            returnResponseToOutputStream(httpResponse);
+            OutputStream outPutStream = socket.getOutputStream();
+            returnResponseToOutputStream(httpResponse, outPutStream);
             System.out.println(Converter.bytesToString(httpResponse));
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,9 +40,10 @@ public class ClientThread extends Thread {
         return RequestParser.parseRequest(requestInputStream);
     }
 
-    public void returnResponseToOutputStream(byte[] httpResponse) throws IOException {
-        DataOutputStream responseOutputStream = new DataOutputStream(socket.getOutputStream());
+    public OutputStream returnResponseToOutputStream(byte[] httpResponse, OutputStream outputStream) throws IOException {
+        OutputStream responseOutputStream = new DataOutputStream(outputStream);
         responseOutputStream.write(httpResponse);
+        return responseOutputStream;
     }
 
     public void closeSocket(Socket socket) {

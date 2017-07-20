@@ -38,7 +38,6 @@ public class Request {
 
     public String getResource() {
         String resource = requestTarget.replace("/", "");
-
         return resource;
     }
 

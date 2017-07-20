@@ -22,7 +22,7 @@ public class RequestParser {
 
     public static String extractHeaders(BufferedReader requestReader) throws IOException {
         String linesOfHeaders = new String();
-        for(String line = requestReader.readLine(); line != null; line = requestReader.readLine()){
+        for(String line = requestReader.readLine(); line != null; line = requestReader.readLine()) {
             linesOfHeaders += line + "\n";
             if(line.equals("")) break;
         }

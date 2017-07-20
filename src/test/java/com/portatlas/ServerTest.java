@@ -1,6 +1,7 @@
 package com.portatlas;
 
 import com.portatlas.helpers.Converter;
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.ResponseSerializer;
@@ -39,86 +40,72 @@ public class ServerTest {
 
     @Test
     public void testAddRootRequestAndResponse() {
-        assertEquals(StatusCodes.OK, server.router.route(getRootRequest).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(getRootRequest).run().getStatus());
     }
 
     @Test
     public void testAddHeadRequestAndResponse() {
         Request headRequest = new Request(RequestMethod.HEAD, "/" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(headRequest).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(headRequest).run().getStatus());
     }
 
     @Test
     public void testAddOptionsRequestAndResponse() {
         Request optionsRequest = new Request(RequestMethod.OPTIONS, "/method_options" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(optionsRequest).getStatus());
-        assertEquals("GET,HEAD,POST,OPTIONS,PUT", server.router.route(optionsRequest).getHeader("Allow"));
+        assertEquals(StatusCodes.OK, server.router.route(optionsRequest).run().getStatus());
+        assertEquals("GET,HEAD,POST,OPTIONS,PUT", server.router.route(optionsRequest).run().getHeader("Allow"));
     }
 
     @Test
     public void testAddOptions2RequestAndResponse() {
         Request options2Request = new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(options2Request).getStatus());
-        assertEquals("GET,OPTIONS", server.router.route(options2Request).getHeader("Allow"));
+        assertEquals(StatusCodes.OK, server.router.route(options2Request).run().getStatus());
+        assertEquals("GET,OPTIONS", server.router.route(options2Request).run().getHeader("Allow"));
     }
 
     @Test
     public void testAddPostRequestAndResponse() {
         Request postRequest = new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(postRequest).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(postRequest).run().getStatus());
     }
 
     @Test
     public void testAddPuttRequestAndResponse() {
         Request putRequest = new Request(RequestMethod.PUT, "/form" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(putRequest).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(putRequest).run().getStatus());
     }
 
     @Test
     public void testAddGetFile1AndResponse() {
         Request getFile1Request = new Request(RequestMethod.GET, "/file1" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(getFile1Request).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(getFile1Request).run().getStatus());
     }
 
     @Test
     public void testAddGetTextfiletxtAndResponse() {
         Request getTextfileTxtRequest = new Request(RequestMethod.GET, "/text-file.txt" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.OK, server.router.route(getTextfileTxtRequest).getStatus());
+        assertEquals(StatusCodes.OK, server.router.route(getTextfileTxtRequest).run().getStatus());
     }
 
     @Test
     public void testAddGetRedirectRootAndResponse() {
         Request redirectRootRequest = new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER);
 
-        assertEquals(StatusCodes.FOUND, server.router.route(redirectRootRequest).getStatus());
+        assertEquals(StatusCodes.FOUND, server.router.route(redirectRootRequest).run().getStatus());
     }
 
     @Test
     public void testServerSocketIsClosed() throws Exception {
         ServerSocket runningSocket = Server.configureServer(args);
-
         Server.closeServerSocket(runningSocket);
 
         assertTrue(runningSocket.isClosed());
-    }
-
-    @Test
-    public void testPutFileRequestReturnsResponseWithStatusMethodNotAllowed() throws IOException {
-        Request putFileRequest = new Request(RequestMethod.PUT, "/file1" , HttpVersion.CURRENT_VER);
-        StringBuilder responseString = new StringBuilder().append("HTTP/1.1 405 Method Not Allowed")
-                                                          .append(serializer.CRLF);
-
-        StringBuilder responseWithStatusNotAllowed = new StringBuilder();
-        responseWithStatusNotAllowed.append("HTTP/1.1 405 Method Not Allowed");
-        responseWithStatusNotAllowed.append(serializer.CRLF);
-
-        assertEquals(responseWithStatusNotAllowed.toString(), convert.bytesToString(server.handleRequest(putFileRequest)));
     }
 }

@@ -1,6 +1,7 @@
 package com.portatlas.response;
 
-import com.portatlas.HttpVersion;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.helpers.Converter;
 
 import org.junit.Before;
@@ -33,9 +34,9 @@ public class ResponseTest {
 
     @Test
     public void testHeaderCanBeSetAndHasHeadersFieldNameContentLengthIsTrue() {
-        response.setHeader("Content-Length", "88");
+        response.setHeader(HeaderName.CONTENT_LENGTH, "88");
 
-        assertEquals("88", response.getHeader("Content-Length"));
+        assertEquals("88", response.getHeader(HeaderName.CONTENT_LENGTH));
     }
 
     @Test
@@ -49,6 +50,5 @@ public class ResponseTest {
     @Test
     public void testGetBodyWhenNull() {
         assertEquals(null, response.getBody());
-
     }
 }

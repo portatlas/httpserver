@@ -1,6 +1,7 @@
 package com.portatlas.request;
 
-import com.portatlas.HttpVersion;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -47,8 +48,8 @@ public class RequestParserTest {
         Request request = parseRequest();
         RequestParser.parseHeaders(request, headers);
 
-        assertEquals("en.wikipedia.org:8080", request.getHeaders().get("Host"));
-        assertEquals("en-us,en:q=0.5", request.getHeaders().get("Accept-Language"));
+        assertEquals("en.wikipedia.org:8080", request.getHeaders().get(HeaderName.HOST));
+        assertEquals("en-us,en:q=0.5", request.getHeaders().get(HeaderName.LANGUAGE));
     }
 
     @Test
@@ -58,7 +59,7 @@ public class RequestParserTest {
         assertEquals(RequestMethod.GET, parsedRequest.getMethod());
         assertEquals("/", parsedRequest.getRequestTarget());
         assertEquals(HttpVersion.CURRENT_VER, parsedRequest.getHttpVersion());
-        assertEquals("en.wikipedia.org:8080", parsedRequest.getHeaders().get("Host"));
-        assertEquals("en-us,en:q=0.5", parsedRequest.getHeaders().get("Accept-Language"));
+        assertEquals("en.wikipedia.org:8080", parsedRequest.getHeaders().get(HeaderName.HOST));
+        assertEquals("en-us,en:q=0.5", parsedRequest.getHeaders().get(HeaderName.LANGUAGE));
     }
 }

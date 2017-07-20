@@ -1,13 +1,19 @@
-package com.portatlas.response;
+package com.portatlas.http_response;
 
 import com.portatlas.helpers.HtmlWriter;
-import com.portatlas.Directory;
+import com.portatlas.response.Response;
+import com.portatlas.response.StatusCodes;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class RootResponse {
-    public static Response run(ArrayList directory) {
+public class RootResponse implements HttpResponse {
+    private ArrayList directory;
+
+    public RootResponse(ArrayList directory) {
+        this.directory = directory;
+    }
+
+    public Response run() {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .body(HtmlWriter.setLink(directory).getBytes())

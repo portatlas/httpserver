@@ -1,47 +1,58 @@
 package com.portatlas;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import org.mockito.Mockito;
+import org.junit.rules.TemporaryFolder;
+import com.portatlas.test_helpers.FileHelper;
 
 public class DirectoryTest {
     private Directory dir;
-    private final File folder = Mockito.mock(File.class);
-    private File mockFile1 = new File("file1");
-    private File mockFile2 = new File("file2");
-    private File[] mockFolder = new File[2];
+    public String directoryPath;
+    public File tempFile;
+
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Before
-    public void setUp() {
-        dir = new Directory();
-        mockFolder[0] = mockFile1;
-        mockFolder[1] = mockFile2;
-        Mockito.when(folder.listFiles()).thenReturn(mockFolder);
+    public void setUp() throws IOException {
+        tempFile = FileHelper.createTempFileWithContent(tempFolder);
+        directoryPath = tempFolder.getRoot().getPath();
+        dir = new Directory(directoryPath);
     }
 
     @Test
     public void testGetDefaultDir() {
-        assertEquals(System.getProperty("user.dir") + "/public/", dir.pathName);
+        Directory defaultDirectory = new Directory();
+        assertEquals(System.getProperty("user.dir") + "/public/", defaultDirectory.pathName);
+    }
+
+    @Test
+    public void testGetDirectoryPathFromArg() {
+        assertEquals(directoryPath, dir.pathName);
     }
 
     @Test
     public void testPrintFileInDir() {
-        List<String> files = Arrays.asList("file1", "file2");
-        assertEquals(files , dir.listFilesForFolder(folder));
+        List<String> files = Arrays.asList("test.gif",
+                                                "test.jpeg",
+                                                "test.png",
+                                                "test_temp_file",
+                                                "test_temp_file.txt");
+        assertEquals(files , dir.files);
     }
 
     @Test
     public void testHasFile() {
-        dir.listFilesForFolder(folder);
-
-        assertTrue(dir.hasFile("file1"));
+        assertTrue(dir.hasFile("test.gif"));
         assertFalse(dir.hasFile("nofile"));
     }
 }
