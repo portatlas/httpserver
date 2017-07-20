@@ -18,7 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import com.portatlas.test_helpers.FileHelper;
 import org.junit.rules.TemporaryFolder;
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -38,7 +37,6 @@ public class ControllerTest {
         controller = new Controller();
         tempFile = FileHelper.createTempFileWithContent(tempFolder);
         directory = new Directory(tempFolder.getRoot().getPath());
-        testRequest.setBody("hello");
         router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), new RootResponse(directory.files));
         router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), new RedirectResponse());
         router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER), new FormResponse(testRequest, directory));

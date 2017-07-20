@@ -5,7 +5,6 @@ import com.portatlas.helpers.Authentication;
 import com.portatlas.http_response.*;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-
 import com.portatlas.response.Response;
 import com.portatlas.response.ResponseSerializer;
 
