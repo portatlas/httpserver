@@ -1,9 +1,9 @@
 package com.portatlas;
 
 public class ArgParser {
-
     public int port = 5000;
-    public String dir = System.getProperty("user.dir") + "/public/";
+    public Directory directory = new Directory();
+    public String dir = directory.defaultDir;
 
     public void parseArgs(String[] args) {
         if (args.length > 0 ){

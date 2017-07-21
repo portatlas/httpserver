@@ -6,7 +6,6 @@ import com.portatlas.response.Response;
 import java.util.HashMap;
 
 public class Router {
-
     public HashMap<Request, Response> routes;
 
     public Router() {
@@ -24,5 +23,4 @@ public class Router {
     public void addRoute(Request request, Response response) {
         routes.put(request, response);
     }
-    
 }

@@ -11,5 +11,4 @@ public class OkResponseTest {
 
         assertEquals(StatusCodes.OK, okResponse.run().getStatus());
     }
-
 }

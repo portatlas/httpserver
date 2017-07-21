@@ -1,6 +1,7 @@
 package com.portatlas.response;
 
 import com.portatlas.request.RequestMethod;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -17,5 +18,4 @@ public class OptionResponseTest {
 
         assertEquals(RequestMethod.GET, response.getHeader("Allow"));
     }
-
 }
