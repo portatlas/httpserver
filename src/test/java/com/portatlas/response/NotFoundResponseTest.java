@@ -11,5 +11,4 @@ public class NotFoundResponseTest {
 
         assertEquals(StatusCodes.NOT_FOUND , notFoundResponse.run().getStatus());
     }
-
 }

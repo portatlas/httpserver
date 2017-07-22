@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ArgParserTest {
-
     private ArgParser ArgParser;
     private String[] args = new String[]{"-p", "9090", "-d", "/user/path"};
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -44,5 +43,4 @@ public class ArgParserTest {
 
         assertEquals("Server running on port: 5000\nDirectory Path: /user/path/\n", outContent.toString());
     }
-
 }

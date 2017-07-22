@@ -2,7 +2,6 @@ package com.portatlas;
 
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.Response;
 import com.portatlas.response.ResponseSerializer;
 import com.portatlas.response.StatusCodes;
 
@@ -15,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
-
     private Server server;
     private ResponseSerializer serializer;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
@@ -136,5 +134,4 @@ public class ServerTest {
 
         assertEquals(responseString.toString(), server.handleRequest(putFileRequest));
     }
-
 }

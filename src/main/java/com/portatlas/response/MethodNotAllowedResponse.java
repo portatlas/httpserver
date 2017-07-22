@@ -5,7 +5,6 @@ public class MethodNotAllowedResponse {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.NOT_ALLOWED)
                                     .build();
-
         return response;
     }
 }

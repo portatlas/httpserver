@@ -1,7 +1,6 @@
 package com.portatlas;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 public class FileReaderTest {
@@ -21,5 +20,4 @@ public class FileReaderTest {
 
         assertEquals("text/plain", file.getMediaType(resource));
     }
-
 }

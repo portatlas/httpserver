@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RequestTest {
-
     private Request request;
     private Request request1 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
@@ -94,5 +93,4 @@ public class RequestTest {
 
         assertEquals(request1.hashCode(), request2.hashCode());
     }
-
 }

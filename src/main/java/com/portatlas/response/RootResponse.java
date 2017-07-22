@@ -5,7 +5,6 @@ import com.portatlas.helpers.HtmlWriter;
 import java.util.ArrayList;
 
 public class RootResponse {
-
     public static Response run(ArrayList files) {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
@@ -13,5 +12,4 @@ public class RootResponse {
                                     .build();
         return response;
     }
-
 }

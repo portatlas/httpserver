@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Request {
-
     private String method;
     private String requestTarget;
     private String httpVersion;

@@ -5,7 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class RedirectResponseTest {
-
     private String redirectLocation = "/";
 
     @Test
@@ -21,5 +20,4 @@ public class RedirectResponseTest {
 
         assertEquals(redirectLocation, redirectResponse.run(redirectLocation).getHeader("Location"));
     }
-
 }

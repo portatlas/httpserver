@@ -3,7 +3,6 @@ package com.portatlas.response;
 import java.util.Map;
 
 public class ResponseSerializer {
-
     public static final String CRLF = "\r\n";
 
     public String serialize(Response response) {
@@ -30,5 +29,4 @@ public class ResponseSerializer {
         }
         return body.toString();
     }
-
 }

@@ -3,7 +3,6 @@ package com.portatlas;
 import java.util.HashMap;
 
 public class FileReader {
-
     public static String getMediaType(String resource) {
         String fileExtension = getFileExtension(resource);
         HashMap<String, String> fileMediaType = new HashMap<String, String> () {{
@@ -20,5 +19,4 @@ public class FileReader {
         int endIndex = fileName.length();
         return fileName.substring(startIndex, endIndex);
     }
-
 }

@@ -6,7 +6,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class FileReaderContentResponseTest {
-
     private FileContentResponse fileContentResponse;
 
     @Before
@@ -54,5 +53,4 @@ public class FileReaderContentResponseTest {
 
         assertEquals("image/gif", fileContentResponse.run(resource).getHeader("Content-Type"));
     }
-
 }

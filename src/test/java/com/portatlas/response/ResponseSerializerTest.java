@@ -1,12 +1,12 @@
 package com.portatlas.response;
 
 import com.portatlas.Directory;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseSerializerTest {
-
     private ResponseSerializer serializer;
 
     @Before
@@ -47,6 +47,7 @@ public class ResponseSerializerTest {
                                                    .append(serializer.CRLF);
 
         assertEquals(builder.toString(), serializer.serialize(response));
+
     }
 
     @Test
@@ -69,5 +70,4 @@ public class ResponseSerializerTest {
         assertEquals(builder.toString(), serializer.serialize(response));
 
     }
-
 }

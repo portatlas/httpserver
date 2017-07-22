@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class RequestParser {
-
     public static Request parseRequest(InputStream inputStream) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(inputStream));
         String requestLine = requestReader.readLine();
@@ -43,5 +42,4 @@ public class RequestParser {
         String[] requestLineCollection = requestLine.split(" ");
         return requestLineCollection;
     }
-
 }

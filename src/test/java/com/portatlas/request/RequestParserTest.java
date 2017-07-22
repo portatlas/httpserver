@@ -11,7 +11,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class RequestParserTest {
-
     private String sampleRequest = "GET / HTTP/1.1\r\nHost: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
     private String headers = "Host: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
     private ByteArrayInputStream sampleRequestInputStream = new ByteArrayInputStream(sampleRequest.getBytes());
@@ -62,5 +61,4 @@ public class RequestParserTest {
         assertEquals("en.wikipedia.org:8080", parsedRequest.getHeaders().get("Host"));
         assertEquals("en-us,en:q=0.5", parsedRequest.getHeaders().get("Accept-Language"));
     }
-
 }

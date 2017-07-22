@@ -1,7 +1,6 @@
 package com.portatlas.response;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 public class MethodNotAllowedResponseTest {
@@ -12,5 +11,4 @@ public class MethodNotAllowedResponseTest {
 
         assertEquals(StatusCodes.NOT_ALLOWED , MethodNotAllowedResponse.run().getStatus());
     }
-
 }

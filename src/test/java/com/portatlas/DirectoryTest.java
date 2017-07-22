@@ -12,7 +12,6 @@ import static org.junit.Assert.assertFalse;
 import org.mockito.Mockito;
 
 public class DirectoryTest {
-
     private Directory dir;
     private final File folder = Mockito.mock(File.class);
     private File mockFile1 = new File("file1");
@@ -45,5 +44,4 @@ public class DirectoryTest {
         assertTrue(dir.hasFile("file1"));
         assertFalse(dir.hasFile("nofile"));
     }
-
 }

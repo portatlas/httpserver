@@ -1,14 +1,12 @@
 package com.portatlas.response;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.ArrayList;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class RootResponseTest {
-
     private RootResponse rootResponse;
     private ArrayList<String> files = new ArrayList<String>();
 
@@ -21,5 +19,4 @@ public class RootResponseTest {
     public void testResponseHasStatus200() {
         assertEquals(StatusCodes.OK, rootResponse.run(files).getStatus());
     }
-
 }

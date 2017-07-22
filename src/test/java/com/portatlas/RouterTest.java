@@ -49,5 +49,4 @@ public class RouterTest {
 
         assertFalse(router.hasRoute(request));
     }
-
 }

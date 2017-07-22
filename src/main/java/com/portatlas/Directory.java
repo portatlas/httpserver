@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Directory {
-
     public String defaultDir = System.getProperty("user.dir") + "/public/";
     public ArrayList files = new ArrayList();
 
@@ -22,5 +21,4 @@ public class Directory {
     public boolean hasFile(String fileName) {
         return (files.contains(fileName)) ? true: false;
     }
-
 }

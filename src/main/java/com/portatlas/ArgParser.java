@@ -1,7 +1,6 @@
 package com.portatlas;
 
 public class ArgParser {
-
     public int port = 5000;
     public Directory directory = new Directory();
     public String dir = directory.defaultDir;

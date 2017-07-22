@@ -50,5 +50,4 @@ public class ResponseBuilderTest {
 
         assertEquals("foo content", response.getBody());
     }
-    
 }

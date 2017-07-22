@@ -1,12 +1,12 @@
 package com.portatlas.response;
 
 import com.portatlas.HttpVersion;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseTest {
-
     private Response response;
 
     @Before
@@ -41,5 +41,4 @@ public class ResponseTest {
 
         assertEquals("<html></html>", response.getBody());
     }
-
 }

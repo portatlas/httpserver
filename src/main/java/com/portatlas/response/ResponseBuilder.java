@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseBuilder {
-
     private String statusCode = StatusCodes.OK;
     private HashMap<String, String> headers = new HashMap<String, String>();
     private String body = "";
@@ -33,5 +32,4 @@ public class ResponseBuilder {
         response.setBody(body);
         return response;
     }
-
 }
