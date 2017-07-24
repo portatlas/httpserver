@@ -11,6 +11,7 @@ import com.portatlas.http_response.NotFoundResponse;
 import com.portatlas.http_response.FormResponse;
 import com.portatlas.http_response.UnauthorizedResponse;
 import com.portatlas.http_response.LogResponse;
+import com.portatlas.http_response.ParameterResponse;
 import com.portatlas.response.Response;
 import com.portatlas.response.ResponseSerializer;
 
@@ -28,6 +29,8 @@ public class Controller {
             processStaticRequest(request, router, directory);
         } else if (isUnsupportedMethodRequest(request, directory)) {
             httpResponse = new MethodNotAllowedResponse();
+        } else if (isRequestWithParameters(request)) {
+            httpResponse = new ParameterResponse(request);
         } else {
             httpResponse = new NotFoundResponse();
         }
@@ -63,5 +66,9 @@ public class Controller {
 
     private static boolean isUnsupportedMethodRequest(Request request, Directory directory) {
         return directory.hasFile(request.getResource()) && !request.getMethod().equals(RequestMethod.GET);
+    }
+
+    private static boolean isRequestWithParameters(Request request) {
+        return request.getResource().contains("?");
     }
 }

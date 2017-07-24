@@ -108,4 +108,12 @@ public class ControllerTest {
 
         assertTrue(Converter.bytesToString(controller.handleRequest(putFormRequest, router, directory)).contains(responseWithStatusOK.toString()));
     }
+
+    @Test
+    public void testRequestWithParametersResponseWithParameterResponse() throws Exception {
+        Request putFormRequest = new Request(RequestMethod.GET, "/parameters?variable_1=Operators%20" , HttpVersion.CURRENT_VER);
+
+        // to complete
+        assertTrue(Converter.bytesToString(controller.handleRequest(putFormRequest, router, directory)).contains("HTTP/1.1"));
+    }
 }

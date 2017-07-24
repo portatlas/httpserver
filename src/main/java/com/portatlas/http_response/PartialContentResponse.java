@@ -11,7 +11,7 @@ public class PartialContentResponse implements HttpResponse {
     private String directoryPath;
     private String resource;
 
-    public PartialContentResponse(Request request, String directoryPath, String resource){
+    public PartialContentResponse(Request request, String directoryPath, String resource) {
         this.request = request;
         this.directoryPath = directoryPath;
         this.resource = resource;
