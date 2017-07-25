@@ -9,24 +9,22 @@ import com.portatlas.http_response.RootResponse;
 import com.portatlas.http_response.RedirectResponse;
 import com.portatlas.http_response.FormResponse;
 import com.portatlas.response.ResponseSerializer;
+import com.portatlas.test_helpers.FileHelper;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import com.portatlas.test_helpers.FileHelper;
+
 import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class ControllerTest {
     private Controller controller;
-    public static Router router = new Router();
+    private Router router;
     private Directory directory;
-    private File tempFile;
-    private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
     private Request testRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
     @Rule
@@ -35,11 +33,40 @@ public class ControllerTest {
     @Before
     public void setUp() throws IOException {
         controller = new Controller();
-        tempFile = FileHelper.createTempFileWithContent(tempFolder);
+        FileHelper.createTempFileWithContent(tempFolder);
         directory = new Directory(tempFolder.getRoot().getPath());
-        router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER), new RootResponse(directory.files));
-        router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER), new RedirectResponse());
-        router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER), new FormResponse(testRequest, directory));
+        router = new Router(directory);
+        testRequest.setBody("hello");
+        router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER),
+                        new RootResponse(directory.files));
+        router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER),
+                        new RedirectResponse());
+        router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER),
+                        new FormResponse(testRequest, directory));
+    }
+
+    @Test
+    public void testBadAuthRequest() throws Exception {
+        Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
+        badAuthrequest.addHeader(HeaderName.AUTH, "Basic 111taW46aHVudGVyMg==");
+        StringBuilder unauthResponse = new StringBuilder();
+        unauthResponse.append("HTTP/1.1 401 Unauthorized")
+                      .append(ResponseSerializer.CRLF)
+                      .append("WWW-Authenticate: Basic");
+
+        assertTrue(Converter.bytesToString(controller.handleRequest(badAuthrequest, router, directory)).contains(unauthResponse.toString()));
+    }
+
+    @Test
+    public void testGoodAuthRequest() throws Exception {
+        Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
+        badAuthrequest.addHeader(HeaderName.AUTH, "Basic YWRtaW46aHVudGVyMg==");
+        StringBuilder authResponse = new StringBuilder();
+        authResponse.append("HTTP/1.1 200 OK")
+                    .append(ResponseSerializer.CRLF)
+                    .append("WWW-Authenticate: Basic");
+
+        assertTrue(Converter.bytesToString(controller.handleRequest(badAuthrequest, router, directory)).contains(authResponse.toString()));
     }
 
     @Test
@@ -48,7 +75,7 @@ public class ControllerTest {
         responseWithStatusOK.append("HTTP/1.1 200 OK")
                             .append(ResponseSerializer.CRLF);
 
-        assertTrue(Converter.bytesToString(controller.handleRequest(getRootRequest, router, directory)).contains(responseWithStatusOK.toString()));
+        assertTrue(Converter.bytesToString(controller.handleRequest(testRequest, router, directory)).contains(responseWithStatusOK.toString()));
     }
 
     @Test
@@ -84,36 +111,5 @@ public class ControllerTest {
                                     .append(ResponseSerializer.CRLF);
 
         assertEquals(responseWithStatusNotAllowed.toString(), Converter.bytesToString(controller.handleRequest(putFileRequest, router, directory)));
-    }
-
-    @Test
-    public void testRangeRequestReturnsResponseWithStatusPartialContent() throws Exception {
-        Request getPartialContent = new Request(RequestMethod.GET, "/test_temp_file.txt", HttpVersion.CURRENT_VER);
-        getPartialContent.addHeader(HeaderName.RANGE, "bytes=0-4");
-
-        StringBuilder responseForPartialContent = new StringBuilder();
-        responseForPartialContent.append("HTTP/1.1 206 Partial Content")
-                                 .append(ResponseSerializer.CRLF);
-
-        assertTrue(Converter.bytesToString(controller.handleRequest(getPartialContent, router, directory)).contains(responseForPartialContent));
-    }
-
-    @Test
-    public void testPostFormRequestReturnsResponseWithStatus200() throws IOException {
-        Request putFormRequest = new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER);
-        putFormRequest.setBody("hello");
-        StringBuilder responseWithStatusOK = new StringBuilder();
-        responseWithStatusOK.append("HTTP/1.1 200 OK")
-                            .append(ResponseSerializer.CRLF);
-
-        assertTrue(Converter.bytesToString(controller.handleRequest(putFormRequest, router, directory)).contains(responseWithStatusOK.toString()));
-    }
-
-    @Test
-    public void testRequestWithParametersResponseWithParameterResponse() throws Exception {
-        Request putFormRequest = new Request(RequestMethod.GET, "/parameters?variable_1=Operators%20" , HttpVersion.CURRENT_VER);
-
-        // to complete
-        assertTrue(Converter.bytesToString(controller.handleRequest(putFormRequest, router, directory)).contains("HTTP/1.1"));
     }
 }

@@ -1,7 +1,7 @@
 package com.portatlas.http_response;
 
-import com.portatlas.HttpVersion;
 import com.portatlas.helpers.Converter;
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.response.StatusCodes;
 import org.junit.Before;

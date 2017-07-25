@@ -89,25 +89,6 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testRequestHasBodyIsFalseForRequestWithOutBody() throws IOException {
-        Request request = parseRequest(requestWithoutBody.getBytes());
-
-        assertFalse(RequestParser.hasBody(request));
-    }
-
-    @Test
-    public void testRequestHasBodyIsTrueForRequestWithOutBody() throws IOException {
-        Request request = parseRequest(requestWithBody.getBytes());
-
-        assertTrue(RequestParser.hasBody(request));
-    }
-
-    @Test
-    public void testBodyIsParsed() throws Exception {
-        assertEquals("data=fatcat", parseRequest(requestWithBody.getBytes()).getRequestBody());
-    }
-
-    @Test
     public void testRequestLineAndHeadersAreParsed() throws IOException {
         Request parsedRequest = parseRequest(requestWithoutBody.getBytes());
 

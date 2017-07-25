@@ -21,7 +21,7 @@ public class RequestParser {
 
         String headersLine = extractHeaders(requestReader);
         parseHeaders(request, headersLine);
-
+        logWriter.logMessage(headersLine);
         if (hasBody(request)) {
             parseBody(requestReader, request);
         }

@@ -39,7 +39,7 @@ public class AuthenticationTest {
 
     @Test
     public void testIsAuthenticated() throws Exception {
-        assertTrue(Authentication.isValidCredentials(authorizationValue));
+        assertTrue(Authentication.isValid(authorizationValue));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.portatlas.response;
 
 public class StatusCodes {
     public static final String OK = "200 OK";
+    public static final String NO_CONTENT = "204 No Content";
     public static final String PARTIAL_CONTENT = "206 Partial Content";
     public static final String FOUND = "302 Found";
     public static final String UNAUTHORIZED = "401 Unauthorized";

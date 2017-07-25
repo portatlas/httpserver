@@ -82,13 +82,6 @@ public class RequestTest {
     }
 
     @Test
-    public void testRequestHasABody() {
-        request1.setBody("data");
-
-        assertEquals("data", request1.getRequestBody());
-    }
-
-    @Test
     public void testOverrideEqualsForRequest() {
         Request request2 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 

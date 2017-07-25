@@ -6,22 +6,19 @@ import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.StatusCodes;
 
+import com.portatlas.response.StatusCodes;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class LogResponseTest {
-    private LogResponse unauthLogResponse;
     private LogResponse authLogResponse;
-    private Request unauthorizedRequest;
     private Request authorizedRequest;
 
     @Before
     public void setUp() {
-        unauthorizedRequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
         authorizedRequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
         authorizedRequest.addHeader(HeaderName.AUTH, "Basic YWRtaW46aHVudGVyMg==");
-        unauthLogResponse = new LogResponse(unauthorizedRequest);
         authLogResponse = new LogResponse(authorizedRequest);
     }
 
