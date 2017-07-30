@@ -1,12 +1,11 @@
 package com.portatlas.helpers;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.test_helpers.FileHelper;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -15,14 +14,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class ContentRangeTest {
     private int charLengthOfFile = 72;
     private int[] partialContentRange = new int[2];
     private Request getPartialContentRequest;
     private String directoryPath;
-    private File tempFile;
     private String resource = "/test_temp_file.txt";
 
     @Rule
@@ -30,7 +28,7 @@ public class ContentRangeTest {
 
     @Before
     public void setUp() throws IOException {
-        tempFile = FileHelper.createTempFileWithContent(tempFolder);
+        FileHelper.createTempFileWithContent(tempFolder);
         directoryPath = tempFolder.getRoot().getPath();
         getPartialContentRequest = new Request(RequestMethod.GET, resource, HttpVersion.CURRENT_VER);
         getPartialContentRequest.addHeader(HeaderName.RANGE, "bytes=0-4");
@@ -42,7 +40,7 @@ public class ContentRangeTest {
         partialContentRange[0] = 0;
         partialContentRange[1] = 5;
 
-        assertTrue(Arrays.equals(partialContentRange, ContentRange.getRange(contentRangeRequest, 2)));
+        assertArrayEquals(partialContentRange, ContentRange.getRange(contentRangeRequest, charLengthOfFile));
     }
 
     @Test
@@ -51,7 +49,7 @@ public class ContentRangeTest {
         partialContentRange[0] = charLengthOfFile - 6;
         partialContentRange[1] = charLengthOfFile;
 
-        assertTrue(Arrays.equals(partialContentRange, ContentRange.getRange(contentRangeRequest, charLengthOfFile)));
+        assertArrayEquals(partialContentRange, ContentRange.getRange(contentRangeRequest, charLengthOfFile));
     }
 
     @Test
@@ -60,7 +58,7 @@ public class ContentRangeTest {
         partialContentRange[0] = 4;
         partialContentRange[1] = charLengthOfFile;
 
-        assertTrue(Arrays.equals(partialContentRange, ContentRange.getRange(contentRangeRequest, charLengthOfFile)));
+        assertArrayEquals(partialContentRange, ContentRange.getRange(contentRangeRequest, charLengthOfFile));
     }
 
     @Test

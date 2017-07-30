@@ -1,18 +1,16 @@
 package com.portatlas;
 
-import com.portatlas.http_constants.HttpVersion;
-import com.portatlas.http_response.FormResponse;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.http_response.HttpResponse;
 import com.portatlas.http_response.OkResponse;
-
 import com.portatlas.response.StatusCodes;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -20,14 +18,12 @@ import static org.junit.Assert.assertFalse;
 public class RouterTest {
     private Router router;
     private Directory directory;
-    private Cookie cookie;
     private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
 
     @Before
     public void setUp() throws IOException {
         directory = new Directory();
         router = new Router(directory);
-        cookie = new Cookie();
         router.addStaticRoutes();
     }
 

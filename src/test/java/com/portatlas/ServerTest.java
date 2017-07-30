@@ -1,10 +1,8 @@
 package com.portatlas;
 
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.StatusCodes;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import com.portatlas.mocks.MockServerSocket;
@@ -31,7 +29,7 @@ public class ServerTest {
     @Test
     public void testCreateClientThreadCreatesANewClientThreadInstance() throws IOException {
         Directory directory = new Directory();
-        Router router = new Router();
+        Router router = new Router(directory);
         ClientThread clientThread = new ClientThread(socket, router, directory);
 
         assertEquals(clientThread.getClass(), Server.createClientThread(serverSocket).getClass());

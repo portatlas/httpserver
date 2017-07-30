@@ -1,6 +1,7 @@
 package com.portatlas.http_response;
 
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.helpers.Converter;
 import com.portatlas.response.StatusCodes;
 
 import org.junit.Before;
@@ -23,5 +24,10 @@ public class UnauthorizedResponseTest {
     @Test
     public void testHeadersContainBasicAuthentication() {
         assertEquals("Basic", unauthResponse.run().getHeader(HeaderName.WWW_AUTH));
+    }
+
+    @Test
+    public void testBodyHasContent() {
+        assertEquals("Request requires authentication", Converter.bytesToString(unauthResponse.run().getBody()));
     }
 }

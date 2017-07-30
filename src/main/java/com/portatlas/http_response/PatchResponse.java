@@ -5,7 +5,7 @@ import com.portatlas.helpers.Converter;
 import com.portatlas.helpers.ResourceReader;
 import com.portatlas.helpers.ResourceWriter;
 import com.portatlas.helpers.ShaEncoder;
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
 import com.portatlas.request.Request;
 import com.portatlas.response.Response;
 import com.portatlas.response.StatusCodes;
@@ -20,15 +20,20 @@ public class PatchResponse implements HttpResponse {
     }
 
     public Response run() {
+        String statusCode;
         String filePath = directory.getPathName() + request.getRequestTarget();
         String resourceContent = Converter.bytesToString(ResourceReader.getContent(filePath));
         String SHA1ofContent = ShaEncoder.encode(resourceContent);
+
         if (SHA1ofContent.equals(request.getHeaders().get(HeaderName.IF_MATCH))) {
+            statusCode = StatusCodes.NO_CONTENT;
             ResourceWriter.write(filePath, request.getRequestBody());
+        } else {
+            statusCode = StatusCodes.PRECONDITIONED_FAILED;
         }
 
         Response response = Response.builder()
-                                    .statusCode(StatusCodes.NO_CONTENT)
+                                    .statusCode(statusCode)
                                     .build();
         return response;
     }

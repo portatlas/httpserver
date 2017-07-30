@@ -1,8 +1,8 @@
 package com.portatlas;
 
 import com.portatlas.helpers.Converter;
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.http_response.RootResponse;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;

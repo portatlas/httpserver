@@ -1,6 +1,6 @@
 package com.portatlas;
 
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.mocks.MockSocket;
@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ClientThreadTest {
-    private String sampleRequest = "GET /foo HTTP/1.1\r\nHost: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
     private Socket socket;
     private Directory directory;
     private Router router;
@@ -65,20 +64,5 @@ public class ClientThreadTest {
         clientThread.closeSocket(socket);
 
         assertTrue(socket.isClosed());
-    }
-
-    private class MockSocket extends Socket {
-        public MockSocket() throws IOException {}
-
-        public InputStream getInputStream() throws IOException {
-            return new ByteArrayInputStream(sampleRequest.getBytes());
-        }
-
-        public OutputStream getOutputStream() throws IOException {
-            return new OutputStream() {
-                @Override
-                public void write(int b) throws IOException {}
-            };
-        }
     }
 }

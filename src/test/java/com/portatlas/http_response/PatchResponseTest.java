@@ -1,8 +1,8 @@
 package com.portatlas.http_response;
 
 import com.portatlas.Directory;
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.helpers.Converter;
 import com.portatlas.helpers.ResourceReader;
 import com.portatlas.request.Request;
@@ -23,6 +23,7 @@ public class PatchResponseTest {
     private HttpResponse patchResponse;
     private Directory directory;
     private String directoryPath;
+    private String eTag = "9801739daae44ec5293d4e1f53d3f4d2d426d91c";
     private String requestTarget = "/test_temp_file.txt";
 
     @Before
@@ -39,18 +40,27 @@ public class PatchResponseTest {
 
     @Test
     public void testResponseHasStatus204() {
-        patchResponse = new PatchResponse(patchRequest, directory);
+        patchRequest.addHeader(HeaderName.IF_MATCH, eTag);
+        patchRequest.setBody("new");
 
         assertEquals(StatusCodes.NO_CONTENT, patchResponse.run().getStatus());
     }
 
     @Test
     public void testSetContentIfMatchETag() {
-        patchRequest.addHeader(HeaderName.IF_MATCH, "9801739daae44ec5293d4e1f53d3f4d2d426d91c");
+        patchRequest.addHeader(HeaderName.IF_MATCH, eTag);
         patchRequest.setBody("new");
         patchResponse.run();
 
         assertEquals("new", Converter.bytesToString(ResourceReader.getContent(directoryPath + requestTarget)));
+    }
+
+    @Test
+    public void testResponseHasStatus214IfETagDoesNotMatch () throws Exception {
+        patchRequest.addHeader(HeaderName.IF_MATCH, "nomatch");
+        patchRequest.setBody("new");
+
+        assertEquals(StatusCodes.PRECONDITIONED_FAILED, patchResponse.run().getStatus());
     }
 
     @Test

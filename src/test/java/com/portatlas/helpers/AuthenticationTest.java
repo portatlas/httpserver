@@ -39,12 +39,11 @@ public class AuthenticationTest {
 
     @Test
     public void testIsAuthenticated() throws Exception {
-        assertTrue(Authentication.isValid(authorizationValue));
+        assertTrue(Authentication.isValidCredentials(authorizationValue));
     }
 
     @Test
     public void testIsNotAuthenticated() throws Exception {
         assertFalse(Authentication.isValidCredentials(invalidAuthorizationValue));
     }
-}
 }

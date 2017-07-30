@@ -1,7 +1,7 @@
 package com.portatlas.request;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 public class RequestTest {
     private Request request;
     private Request request1 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    private Request request2 = new Request(RequestMethod.GET, "/" , "type=chocolate", HttpVersion.CURRENT_VER);
 
     @Before
     public void setUp() {
@@ -32,6 +33,13 @@ public class RequestTest {
     }
 
     @Test
+    public void testSetRequestParamsToRequest() {
+        request.setRequestParams("type=chocolate");
+
+        assertEquals("type=chocolate", request.getRequestParams());
+    }
+
+    @Test
     public void testSetHTTPVersionToRequest() {
         request.setHttpVersion(HttpVersion.CURRENT_VER);
 
@@ -39,15 +47,20 @@ public class RequestTest {
     }
 
     @Test
-    public void testRequestHasAMethod() {
+    public void testGetRequestMethod() {
         assertEquals(RequestMethod.GET, request1.getMethod());
     }
 
     @Test
-    public void testRequestHasARequestTarget() {
+    public void testGetRequestTarget() {
         assertEquals("/", request1.getRequestTarget());
     }
-    
+
+    @Test
+    public void testGetParams() {
+        assertEquals("type=chocolate", request2.getRequestParams());
+    }
+
     @Test
     public void testGetResourceFromRequestTarget() {
         request.setRequestTarget("/file.txt");

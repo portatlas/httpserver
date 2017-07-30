@@ -1,23 +1,25 @@
 package com.portatlas.http_response;
 
-import com.portatlas.Cookie;
 import com.portatlas.helpers.Converter;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
+import com.portatlas.request.Request;
+import com.portatlas.request.RequestMethod;
 import com.portatlas.response.StatusCodes;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class UseCookieResponseTest {
-
-    private Cookie cookie;
     private UseCookieResponse useCookieResponse;
+    private Request request;
 
     @Before
     public void setUp() {
-        cookie = new Cookie();
-        cookie.addCookie("type", "chocolate");
-        useCookieResponse = new UseCookieResponse(cookie);
+        request = new Request(RequestMethod.GET, "/eat_cookie", HttpVersion.CURRENT_VER);
+        request.addHeader(HeaderName.COOKIE, "type=chocolate");
+        useCookieResponse = new UseCookieResponse(request);
     }
 
     @Test

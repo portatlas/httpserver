@@ -1,12 +1,11 @@
 package com.portatlas.http_response;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.StatusCodes;
 
-import com.portatlas.response.StatusCodes;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Request {
     private String method;
     private String requestTarget;
+    private String requestParams;
     private String httpVersion;
     private HashMap<String, String> headers;
     private String body;
@@ -17,6 +18,14 @@ public class Request {
     public Request(String method, String requestTarget, String httpVersion) {
         setMethod(method);
         setRequestTarget(requestTarget);
+        setHttpVersion(httpVersion);
+        headers = new HashMap<String, String>();
+    }
+
+    public Request(String method, String requestTarget, String params, String httpVersion) {
+        setMethod(method);
+        setRequestTarget(requestTarget);
+        setRequestParams(params);
         setHttpVersion(httpVersion);
         headers = new HashMap<String, String>();
     }
@@ -35,6 +44,14 @@ public class Request {
 
     public String getRequestTarget() {
         return requestTarget;
+    }
+
+    public void setRequestParams(String requestParams) {
+        this.requestParams = requestParams;
+    }
+
+    public String getRequestParams() {
+        return requestParams;
     }
 
     public String getResource() {

@@ -1,5 +1,7 @@
 package com.portatlas.response;
 
+import com.portatlas.constants.HttpVersion;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class ResponseSerializer {
     }
 
     public static byte[] serializeRequestLine(Response response) {
-        String statusLine = "HTTP/1.1 " + response.getStatus() + CRLF;
+        String statusLine = HttpVersion.CURRENT_VER + " " + response.getStatus() + CRLF;
         return statusLine.getBytes();
     }
 

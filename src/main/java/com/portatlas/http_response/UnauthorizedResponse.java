@@ -1,6 +1,6 @@
 package com.portatlas.http_response;
 
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
 import com.portatlas.response.Response;
 import com.portatlas.response.StatusCodes;
 

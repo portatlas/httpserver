@@ -14,9 +14,9 @@ public class ParameterDecoderTest {
     }
 
     @Test
-    public void testSpliceParametersAfterQuestionMark() throws Exception {
-        String queryString = "/parameters?variable_1=Operators%20%3C";
+    public void testFormatParams() {
+        String queryString = "variable_1=Operators%20%3C&variable_2=stuff";
 
-        assertEquals("variable_1 = Operators%20%3C", ParameterDecoder.spliceForParams(queryString));
+        assertEquals("variable_1 = Operators%20%3C\nvariable_2 = stuff", ParameterDecoder.formatParams(queryString));
     }
 }

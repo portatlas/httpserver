@@ -1,7 +1,7 @@
 package com.portatlas;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.http_response.*;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
@@ -51,11 +51,13 @@ public class Router {
         addRoute(new Request(RequestMethod.GET, "/patch-content.txt" , HttpVersion.CURRENT_VER), new FileContentResponse(directory.getPathName(), "patch-content.txt"));
     }
 
-    public void addDynamicRoutes(Directory directory, Request request, Cookie cookie) throws IOException {
+    public void addDynamicRoutes(Directory directory, Request request) throws IOException {
         addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER), new FormResponse(request, directory));
         addRoute(new Request(RequestMethod.PUT, "/form" , HttpVersion.CURRENT_VER), new FormResponse(request, directory));
         addRoute(new Request(RequestMethod.PATCH, "/patch-content.txt" , HttpVersion.CURRENT_VER), new PatchResponse(request, directory));
         addRoute(new Request(RequestMethod.GET, "/partial_content.txt" , HttpVersion.CURRENT_VER), new PartialContentResponse(request, directory.getPathName(), request.getRequestTarget()));
-        addRoute(new Request(RequestMethod.GET, "/eat_cookie" , HttpVersion.CURRENT_VER), new UseCookieResponse(cookie));
+        addRoute(new Request(RequestMethod.GET, "/parameters" , HttpVersion.CURRENT_VER), new ParameterResponse(request));
+        addRoute(new Request(RequestMethod.GET, "/eat_cookie" , HttpVersion.CURRENT_VER), new UseCookieResponse(request));
+        addRoute(new Request(RequestMethod.GET, "/cookie" , HttpVersion.CURRENT_VER), new SetCookieResponse(request));
     }
 }

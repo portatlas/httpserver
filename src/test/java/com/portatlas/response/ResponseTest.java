@@ -1,7 +1,7 @@
 package com.portatlas.response;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.helpers.Converter;
 
 import org.junit.Before;

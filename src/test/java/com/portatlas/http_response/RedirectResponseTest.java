@@ -1,5 +1,6 @@
 package com.portatlas.http_response;
 
+import com.portatlas.constants.HeaderName;
 import com.portatlas.response.StatusCodes;
 
 import org.junit.Test;
@@ -17,6 +18,6 @@ public class RedirectResponseTest {
     public void testResponseHasRedirectLocation() {
         RedirectResponse redirectResponse = new RedirectResponse();
 
-        assertEquals("/", redirectResponse.run().getHeader("Location"));
+        assertEquals("/", redirectResponse.run().getHeader(HeaderName.LOCATION));
     }
 }
