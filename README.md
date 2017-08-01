@@ -26,7 +26,7 @@ Run the following command to run the unit tests: <br>
 ```$ mvn test```
 
 ## Run Acceptance Test
-The acceptance test and instructions to run them can be found [here](https://github.com/8thlight/cob_spec]) 
+The acceptance test and instructions to run them can be found [here](https://github.com/8thlight/cob_spec) 
 
 ## Compile and Build Package
 At the root dir run the command:<br>
