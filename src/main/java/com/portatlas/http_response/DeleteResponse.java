@@ -15,6 +15,7 @@ public class DeleteResponse implements HttpResponse {
 
     public Response run() {
         ResourceWriter.delete(directoryPath + "/" + resource);
+
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .build();

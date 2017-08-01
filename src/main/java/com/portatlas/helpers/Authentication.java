@@ -25,17 +25,17 @@ public class Authentication {
     }
 
     public static boolean isValidFormat(String authorizationValue) {
-        if (ifValidAuthType(authorizationValue) && isValidLength(authorizationValue)) {
+        if (validAuthType(authorizationValue) && validLength(authorizationValue)) {
             return true;
         }
         return false;
     }
 
-    private static boolean ifValidAuthType(String authorizationValue) {
+    private static boolean validAuthType(String authorizationValue) {
         return getAuthType(authorizationValue).equals(authType);
     }
 
-    private static boolean isValidLength(String authorizationValue) {
+    private static boolean validLength(String authorizationValue) {
         return authorizationValue.length() == 26;
     }
 

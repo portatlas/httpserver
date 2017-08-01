@@ -1,6 +1,6 @@
 package com.portatlas;
 
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.mocks.MockSocket;
@@ -29,7 +29,7 @@ public class ClientThreadTest {
     public void setUp() throws IOException {
         socket = new MockSocket();
         directory = new Directory();
-        router = new Router();
+        router = new Router(directory);
         clientThread = new ClientThread(socket, router, directory);
     }
     @Test
