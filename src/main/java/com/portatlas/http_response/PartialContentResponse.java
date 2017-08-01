@@ -20,7 +20,7 @@ public class PartialContentResponse implements HttpResponse {
         String statusCode = StatusCodes.OK;
         byte[] body;
 
-        if(request.getHeaders().containsKey(HeaderName.RANGE)){
+        if(request.getHeaders().containsKey(HeaderName.RANGE)) {
             statusCode = StatusCodes.PARTIAL_CONTENT;
             int lengthOfContent = ResourceReader.getContentLength(filePath);
             String rangeRequested = ContentRange.getRangeRequested(request);

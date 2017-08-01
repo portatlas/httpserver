@@ -44,7 +44,7 @@ public class ServerTest {
     }
 
     @Test
-    public void testServerSocketIsClosed() throws Exception {
+    public void testServerSocketIsClosed() throws IOException {
         ServerSocket runningSocket = new MockServerSocket();
         Server.closeServerSocket(runningSocket);
 

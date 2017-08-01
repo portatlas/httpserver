@@ -1,5 +1,6 @@
 package com.portatlas.http_response;
 
+import com.portatlas.constants.HeaderName;
 import com.portatlas.constants.HttpVersion;
 import com.portatlas.response.StatusCodes;
 import com.portatlas.test_helpers.FileHelper;
@@ -29,27 +30,27 @@ public class PartialContentResponseTest {
     public void setUp() throws IOException {
         FileHelper.createTempFileWithContent(tempFolder);
         directoryPath = tempFolder.getRoot().getPath();
-        fullContentRequest = new Request(RequestMethod.GET, "/test_temp_file.txt", HttpVersion.CURRENT_VER);
-        getPartialContentRequest = new Request(RequestMethod.GET, "/test_temp_file.txt", HttpVersion.CURRENT_VER);
-        getPartialContentRequest.addHeader("Range", "bytes=0-4");
-    }
-
-    @Test
-    public void testResponseHasStatus206ForRangeRequest() {
-        partialContentResponse = new PartialContentResponse(fullContentRequest, directoryPath, resource);
-
-        assertEquals(StatusCodes.OK, partialContentResponse.run().getStatus());
+        fullContentRequest = new Request(RequestMethod.GET, resource, HttpVersion.CURRENT_VER);
+        getPartialContentRequest = new Request(RequestMethod.GET, resource, HttpVersion.CURRENT_VER);
+        getPartialContentRequest.addHeader(HeaderName.RANGE, "bytes=0-4");
     }
 
     @Test
     public void testResponseHasStatus200ForRequestWithOutRange() {
+        PartialContentResponse fullContentResponse = new PartialContentResponse(fullContentRequest, directoryPath, resource);
+
+        assertEquals(StatusCodes.OK, fullContentResponse.run().getStatus());
+    }
+
+    @Test
+    public void testResponseHasStatus206ForRangeRequest() {
         partialContentResponse = new PartialContentResponse(getPartialContentRequest, directoryPath, resource);
 
         assertEquals(StatusCodes.PARTIAL_CONTENT, partialContentResponse.run().getStatus());
     }
 
     @Test
-    public void testResponseHasBodyWithPartialContent() throws Exception {
+    public void testResponseHasBodyWithPartialContent() {
         partialContentResponse = new PartialContentResponse(getPartialContentRequest, directoryPath, resource);
 
         assertEquals("testi", Converter.bytesToString(partialContentResponse.run().getBody()));

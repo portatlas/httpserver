@@ -28,24 +28,24 @@ public class ImageContentResponseTest {
     }
 
     @Test
-    public void testResponseHasStatus200() throws IOException {
+    public void testResponseHasStatus200() {
         assertEquals(StatusCodes.OK, jpegContentResponse.run().getStatus());
     }
 
     @Test
-    public void testResponseHasContentType() throws IOException{
+    public void testResponseHasContentType() {
         assertEquals("image/jpeg", jpegContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));
     }
 
     @Test
-    public void testHeaderContentTypeOfPNG() throws IOException{
+    public void testHeaderContentTypeOfPNG() {
         ImageContentResponse pngContentResponse = new ImageContentResponse(tempFolderPath, "test.png");
 
         assertEquals("image/png", pngContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));
     }
 
     @Test
-    public void testHeaderContentTypeOfGIF() throws IOException{
+    public void testHeaderContentTypeOfGIF() {
         ImageContentResponse gifContentResponse = new ImageContentResponse(tempFolderPath, "test.gif");
 
         assertEquals("image/gif", gifContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));

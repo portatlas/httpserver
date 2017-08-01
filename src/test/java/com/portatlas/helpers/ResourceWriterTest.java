@@ -17,36 +17,37 @@ public class ResourceWriterTest {
     private Directory directory;
     private String filePath;
     private ResourceReader resourceReader;
+    private String newResource = "/newlycreatedfile";
 
     @Before
     public void setUp() throws IOException {
         directory = new Directory(tempFolder.getRoot().getPath());
         filePath = tempFolder.getRoot().getPath();
         resourceReader = new ResourceReader();
-        ResourceWriter.createNewFile(filePath + "/newlycreatedfile");
+        ResourceWriter.createNewFile(filePath + newResource);
     }
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Test
-    public void testCreateNewFile() throws Exception {
+    public void testCreateNewFile() {
         directory.listFilesForFolder(new File(tempFolder.getRoot().getPath()));
 
         assertTrue(directory.hasFile("newlycreatedfile"));
     }
 
     @Test
-    public void testWriteContentToFileCreated() throws Exception {
+    public void testWriteContentToFileCreated() {
         String content = "writing new content daily";
-        ResourceWriter.write(filePath + "/newlycreatedfile", content);
-        String parsedContent = new String(resourceReader.getContent(filePath + "/newlycreatedfile"));
+        ResourceWriter.write(filePath + newResource, content);
+        String parsedContent = new String(resourceReader.getContent(filePath + newResource));
 
         assertEquals(content, parsedContent);
     }
 
     @Test
-    public void testItDeletesFile() throws Exception {
+    public void testItDeletesFile() {
         ResourceWriter.delete(filePath + "/tempfiletodelete");
         directory.listFilesForFolder(new File(tempFolder.getRoot().getPath()));
 

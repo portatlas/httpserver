@@ -45,7 +45,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testBadAuthRequest() throws Exception {
+    public void testBadAuthRequest() throws IOException {
         Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
         badAuthrequest.addHeader(HeaderName.AUTH, "Basic 111taW46aHVudGVyMg==");
         StringBuilder unauthResponse = new StringBuilder();
@@ -57,7 +57,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testGoodAuthRequest() throws Exception {
+    public void testGoodAuthRequestReturnsResponse() throws IOException {
         Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
         badAuthrequest.addHeader(HeaderName.AUTH, "Basic YWRtaW46aHVudGVyMg==");
         StringBuilder authResponse = new StringBuilder();
@@ -69,7 +69,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testGetRootReturnsResponseWithStatus200() throws IOException {
+    public void testGetRootReturnsResponse() throws IOException {
         StringBuilder responseWithStatusOK = new StringBuilder();
         responseWithStatusOK.append("HTTP/1.1 200 OK")
                             .append(ResponseSerializer.CRLF);
@@ -78,7 +78,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testGetRootRedirectReturnsResponseWithStatus302() throws IOException {
+    public void testGetRootRedirectReturnsResponse() throws IOException {
         Request getRootRedirectRequest = new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER);
 
         StringBuilder responseWithStatusFound = new StringBuilder();
@@ -91,7 +91,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testHeadFoobarRequestReturnsResponseWithStatusNotFound() throws IOException {
+    public void testHeadFoobarRequestReturnsResponse() throws IOException {
         Request getHeadFoobarRequest = new Request(RequestMethod.HEAD, "/foobar" , HttpVersion.CURRENT_VER);
 
         StringBuilder responseWithStatusNotFound = new StringBuilder();
@@ -102,7 +102,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testPutFileRequestReturnsResponseWithStatusMethodNotAllowed() throws IOException {
+    public void testPutFileRequestReturnsResponse() throws IOException {
         Request putFileRequest = new Request(RequestMethod.PUT, "/test_temp_file" , HttpVersion.CURRENT_VER);
 
         StringBuilder responseWithStatusNotAllowed = new StringBuilder();

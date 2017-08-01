@@ -19,7 +19,7 @@ public class Controller {
 
     public static byte[] handleRequest(Request request, Router router, Directory directory) throws IOException {
         router.addDynamicRoutes(directory, request);
-        if (isAuthorizedRequest(request)){
+        if (isAuthorizedRequest(request)) {
             verifyCredentials(request);
         } else if (router.hasRoute(request)) {
             httpResponse = router.route(request);

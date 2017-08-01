@@ -6,9 +6,8 @@ The HTTP Server supports the following:
 2. Decoding Parameters
 3. Basic Authentication
 4. Basic Cookie Implementation (Setting a cookie on the client side)
-5. The server can serve txt, jpgeg, png, and gif files.
-6. Partial Content Request
-
+5. The server can serve txt, jpeg, png, and gif files.
+6. Range request can be made to get partial content from a txt file
 
 ## Getting Started
 Clone this repository to your local machine
@@ -18,9 +17,9 @@ Clone this repository to your local machine
 ```$ cd httpserver```
 
 ## Dependencies
-1. Java 1.8
-2. JUnit 4.12
-3. Maven
+1. [Java 1.8](http://docs.oracle.com/javase/8/docs/)
+2. [JUnit 4.12](http://junit.org/junit4/)
+3. [Maven](https://maven.apache.org)
 
 ## Run Tests
 Run the following command to run the unit tests: <br>
@@ -43,4 +42,6 @@ Where:<br>
 
 You should see the port and directory displayed to the console.
 
-Go to [http://localhost:5000](http://localhost:5000) and you should see the contents of the public directory.
+When a HTTP request is made to the server you should be able to see the response on the console.
+
+Additionally, you can go to [http://localhost:5000](http://localhost:5000) on your browser and interact with the server there.

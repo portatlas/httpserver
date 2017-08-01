@@ -56,7 +56,7 @@ public class PatchResponseTest {
     }
 
     @Test
-    public void testResponseHasStatus214IfETagDoesNotMatch () throws Exception {
+    public void testResponseHasStatus214IfETagDoesNotMatch () {
         patchRequest.addHeader(HeaderName.IF_MATCH, "nomatch");
         patchRequest.setBody("new");
 

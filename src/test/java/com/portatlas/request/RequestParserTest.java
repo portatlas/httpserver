@@ -57,17 +57,17 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testRequestTargetWithParamsIsParsed() throws Exception {
+    public void testRequestTargetWithParamsIsParsed() throws IOException {
         assertEquals("/test", parseRequest(requestWithParams.getBytes()).getRequestTarget());
     }
 
     @Test
-    public void testParamsIsParsed() throws Exception {
+    public void testParamsIsParsed() throws IOException {
         assertEquals("type = chocolate", parseRequest(requestWithParams.getBytes()).getRequestParams());
     }
 
     @Test
-    public void testEncodedParamsIsParsed() throws Exception {
+    public void testEncodedParamsIsParsed() throws IOException {
         String decodedParams = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
         assertEquals(decodedParams, parseRequest(requestWithEncodedParams.getBytes()).getRequestParams());
     }
@@ -96,7 +96,7 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testBodyIsParsed() throws Exception {
+    public void testBodyIsParsed() throws IOException {
         assertEquals("data=fatcat", parseRequest(requestWithBody.getBytes()).getRequestBody());
     }
 

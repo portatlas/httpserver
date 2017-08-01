@@ -9,7 +9,7 @@ public class FileContentResponse implements HttpResponse {
     private String directoryPath;
     private String resource;
 
-    public FileContentResponse(String directoryPath, String resource){
+    public FileContentResponse(String directoryPath, String resource) {
         this.directoryPath = directoryPath;
         this.resource = resource;
     }

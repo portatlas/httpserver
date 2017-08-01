@@ -17,7 +17,7 @@ public class ResourceWriter {
     public static void write(String filePath, String content) {
         try {
             File file = new File(filePath);
-            if(!file.exists()){
+            if(!file.exists()) {
                 file.createNewFile();
             }
             fileWriter = new FileWriter(file.getAbsoluteFile(), false);
@@ -27,10 +27,10 @@ public class ResourceWriter {
             e.printStackTrace();
         } finally {
             try {
-                if(bufferedWriter != null){
+                if(bufferedWriter != null) {
                     bufferedWriter.close();
                 }
-                if(fileWriter != null){
+                if(fileWriter != null) {
                     fileWriter.close();
                 }
             } catch (IOException e) {

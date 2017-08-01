@@ -53,7 +53,7 @@ public class ContentRangeTest {
     }
 
     @Test
-    public void testParseRequestContentRangeWithStart() throws Exception {
+    public void testParseRequestContentRangeWithStart() {
         String contentRangeRequest = "4-";
         partialContentRange[0] = 4;
         partialContentRange[1] = charLengthOfFile;
@@ -67,7 +67,7 @@ public class ContentRangeTest {
     }
 
     @Test
-    public void testBuildPartialContent() throws Exception {
+    public void testBuildPartialContent() {
         String contentRangeRequest = "0-4";
         int charLengthOfFile = 8;
         byte[] fullContent = "testing\n".getBytes();

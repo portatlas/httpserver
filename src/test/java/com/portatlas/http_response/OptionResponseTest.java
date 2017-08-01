@@ -1,5 +1,6 @@
 package com.portatlas.http_response;
 
+import com.portatlas.constants.HeaderName;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.Response;
 import com.portatlas.response.StatusCodes;
@@ -12,8 +13,8 @@ public class OptionResponseTest {
     private OptionResponse optionResponse;
 
     @Before
-    public void setUp(){
-        optionResponse = new OptionResponse("Allow", "GET");
+    public void setUp() {
+        optionResponse = new OptionResponse(HeaderName.ALLOW, "GET");
     }
 
     @Test
@@ -25,6 +26,6 @@ public class OptionResponseTest {
     public void testResponseHeaderCanBeSet() {
         Response response = optionResponse.run();
 
-        assertEquals(RequestMethod.GET, response.getHeader("Allow"));
+        assertEquals(RequestMethod.GET, response.getHeader(HeaderName.ALLOW));
     }
 }

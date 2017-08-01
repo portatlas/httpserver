@@ -21,7 +21,7 @@ public class CookieParserTest {
     }
 
     @Test
-    public void testCookieStringThrowsErrorIfBadFormat() throws Exception {
+    public void testCookieStringThrowsErrorIfFormatIsBad() throws Exception {
         String rawCookie = "chocolate";
 
         thrown.expect(Exception.class);

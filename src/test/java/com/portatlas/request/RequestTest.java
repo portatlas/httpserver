@@ -9,9 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RequestTest {
+    private String chocolateCookie = "type=chocolate";
     private Request request;
     private Request request1 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
-    private Request request2 = new Request(RequestMethod.GET, "/" , "type=chocolate", HttpVersion.CURRENT_VER);
+    private Request request2 = new Request(RequestMethod.GET, "/" , chocolateCookie, HttpVersion.CURRENT_VER);
 
     @Before
     public void setUp() {
@@ -34,9 +35,9 @@ public class RequestTest {
 
     @Test
     public void testSetRequestParamsToRequest() {
-        request.setRequestParams("type=chocolate");
+        request.setRequestParams(chocolateCookie);
 
-        assertEquals("type=chocolate", request.getRequestParams());
+        assertEquals(chocolateCookie, request.getRequestParams());
     }
 
     @Test
@@ -58,7 +59,7 @@ public class RequestTest {
 
     @Test
     public void testGetParams() {
-        assertEquals("type=chocolate", request2.getRequestParams());
+        assertEquals(chocolateCookie, request2.getRequestParams());
     }
 
     @Test

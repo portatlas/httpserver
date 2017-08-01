@@ -6,6 +6,8 @@ import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.response.StatusCodes;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -15,7 +17,7 @@ public class ParameterResponseTest {
     private ParameterResponse parameterResponse;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws UnsupportedEncodingException {
         String decodedParams = ParameterDecoder.decode("variable_1=Operators%20%3C");
         request = new Request(StatusCodes.OK, "/target", decodedParams, HttpVersion.CURRENT_VER);
         parameterResponse = new ParameterResponse(request);

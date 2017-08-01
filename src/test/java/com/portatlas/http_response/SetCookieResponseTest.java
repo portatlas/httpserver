@@ -14,10 +14,10 @@ import static org.junit.Assert.assertEquals;
 public class SetCookieResponseTest {
     private SetCookieResponse setCookieResponse;
     private Request request;
-
+    private String chocolateCookie = "type=chocolate";
     @Before
     public void setUp() {
-        request = new Request(RequestMethod.GET, "/cookie", "type=chocolate", HttpVersion.CURRENT_VER);
+        request = new Request(RequestMethod.GET, "/cookie", chocolateCookie, HttpVersion.CURRENT_VER);
         setCookieResponse = new SetCookieResponse(request);
     }
 
@@ -27,12 +27,12 @@ public class SetCookieResponseTest {
     }
 
     @Test
-    public void testBodyContentIsEat() throws Exception {
+    public void testBodyContentIsEat() {
         assertEquals("Eat", Converter.bytesToString(setCookieResponse.run().getBody()));
     }
 
     @Test
-    public void testSetCookieWithCookieFromURL() throws Exception {
-        assertEquals("type=chocolate", setCookieResponse.run().getHeaders().get(HeaderName.SET_COOKIE));
+    public void testSetCookieWithCookieFromURL() {
+        assertEquals(chocolateCookie, setCookieResponse.run().getHeaders().get(HeaderName.SET_COOKIE));
     }
 }

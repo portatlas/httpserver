@@ -1,5 +1,6 @@
 package com.portatlas;
 
+import com.portatlas.constants.HeaderName;
 import com.portatlas.constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
@@ -72,7 +73,7 @@ public class RouterTest {
         Request optionsRequest = new Request(RequestMethod.OPTIONS, "/method_options" , HttpVersion.CURRENT_VER);
 
         assertEquals(StatusCodes.OK, router.route(optionsRequest).run().getStatus());
-        assertEquals("GET,HEAD,POST,OPTIONS,PUT", router.route(optionsRequest).run().getHeader("Allow"));
+        assertEquals("GET,HEAD,POST,OPTIONS,PUT", router.route(optionsRequest).run().getHeader(HeaderName.ALLOW));
     }
 
     @Test
@@ -80,7 +81,7 @@ public class RouterTest {
         Request options2Request = new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER);
 
         assertEquals(StatusCodes.OK, router.route(options2Request).run().getStatus());
-        assertEquals("GET,OPTIONS", router.route(options2Request).run().getHeader("Allow"));
+        assertEquals("GET,OPTIONS", router.route(options2Request).run().getHeader(HeaderName.ALLOW));
     }
 
     @Test

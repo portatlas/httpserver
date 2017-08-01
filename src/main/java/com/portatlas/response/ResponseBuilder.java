@@ -26,7 +26,7 @@ public class ResponseBuilder {
     public Response build() {
         Response response = new Response();
         response.setStatus(statusCode);
-        for (Map.Entry<String, String> header: headers.entrySet()){
+        for (Map.Entry<String, String> header: headers.entrySet()) {
             response.setHeader(header.getKey(), header.getValue());
         }
         response.setBody(body);

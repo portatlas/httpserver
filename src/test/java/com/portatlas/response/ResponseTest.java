@@ -33,7 +33,7 @@ public class ResponseTest {
     }
 
     @Test
-    public void testHeaderCanBeSetAndHasHeadersFieldNameContentLengthIsTrue() {
+    public void testSetHeader() {
         response.setHeader(HeaderName.CONTENT_LENGTH, "88");
 
         assertEquals("88", response.getHeader(HeaderName.CONTENT_LENGTH));

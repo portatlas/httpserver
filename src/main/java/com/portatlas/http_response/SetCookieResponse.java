@@ -8,7 +8,7 @@ import com.portatlas.response.StatusCodes;
 public class SetCookieResponse implements HttpResponse {
     private Request request;
 
-    public SetCookieResponse(Request request){
+    public SetCookieResponse(Request request) {
         this.request = request;
     }
 

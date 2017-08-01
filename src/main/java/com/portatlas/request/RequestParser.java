@@ -32,7 +32,7 @@ public class RequestParser {
         String requestFirstLine = requestReader.readLine();
         logWriter.logMessage(requestFirstLine);
         String[] requestLine = splitRequestLine(requestFirstLine);
-        if (hasParams(requestLine[requestURI])){
+        if (hasParams(requestLine[requestURI])) {
             buildRequestWithParams(requestLine[httpMethod], requestLine[requestURI], requestLine[httpVersion]);
         } else {
             request = new Request(requestLine[httpMethod], requestLine[requestURI], requestLine[httpVersion]);
