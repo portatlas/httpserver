@@ -9,7 +9,6 @@ The HTTP Server supports the following:
 5. The server can serve txt, jpeg, png, and gif files.
 6. Range request can be made to get partial content from a txt file
 
-
 ## Getting Started
 Clone this repository to your local machine
 <br>
