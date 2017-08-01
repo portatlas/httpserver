@@ -8,6 +8,7 @@ public class Request {
     private String requestTarget;
     private String httpVersion;
     private HashMap<String, String> headers;
+    private String body;
 
     public Request() {
         headers = new HashMap<String, String>();
@@ -38,7 +39,6 @@ public class Request {
 
     public String getResource() {
         String resource = requestTarget.replace("/", "");
-
         return resource;
     }
 
@@ -56,6 +56,14 @@ public class Request {
 
     public HashMap<String, String> getHeaders() {
         return headers;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getRequestBody() {
+        return body;
     }
 
     @Override

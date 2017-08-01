@@ -1,73 +1,60 @@
 package com.portatlas.response;
 
-import com.portatlas.Directory;
+import java.io.IOException;
 
-import org.junit.Before;
+import com.portatlas.helpers.Converter;
+import com.portatlas.http_constants.HeaderName;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseSerializerTest {
-    private ResponseSerializer serializer;
-
-    @Before
-    public void setUp() {
-        serializer = new ResponseSerializer();
-    }
 
     @Test
-    public void testItSerializes200OK() {
+    public void testItSerializesResponseLine() throws IOException {
         Response response = Response.builder()
                                     .statusCode(StatusCodes.OK)
                                     .build();
+        byte[] responseWithStatusOKBytes = ResponseSerializer.serialize(response);
+        String responseString = new String(responseWithStatusOKBytes);
 
-        assertEquals("HTTP/1.1 200 OK" + serializer.CRLF, serializer.serialize(response));
+        assertEquals("HTTP/1.1 200 OK" + ResponseSerializer.CRLF, responseString);
     }
 
     @Test
-    public void testItSerializes404NotFound() {
+    public void testItSerializesHeaders() throws IOException {
         Response response = Response.builder()
-                                    .statusCode(StatusCodes.NOT_FOUND)
-                                    .build();
-
-        assertEquals("HTTP/1.1 404 Not Found" + serializer.CRLF, serializer.serialize(response));
-    }
-
-    @Test
-    public void testItSerializesHeaders() {
-        Response response = Response.builder()
-                                    .header("Content-Type", "text/plain")
-                                    .header("Content-Length", "3")
+                                    .header(HeaderName.CONTENT_TYPE, "text/plain")
+                                    .header(HeaderName.CONTENT_LENGTH, "3")
                                     .build();
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Length: 3")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Type: text/plain")
-                                                   .append(serializer.CRLF);
+                                                   .append(ResponseSerializer.CRLF);
 
-        assertEquals(builder.toString(), serializer.serialize(response));
-
+        assertEquals(builder.toString(), Converter.bytesToString(ResponseSerializer.serialize(response)));
     }
 
     @Test
-    public void testItSerializesBody() {
+    public void testItSerializesBodyWithText() throws IOException {
         Response response = Response.builder()
-                                    .header("Content-Type", "text/plain")
-                                    .header("Content-Length", "3")
-                                    .body("<a href=\"/file1\">file1</a>")
+                                    .header(HeaderName.CONTENT_TYPE, "text/plain")
+                                    .header(HeaderName.CONTENT_LENGTH, "3")
+                                    .body("<a href=\"/file1\">file1</a>".getBytes())
                                     .build();
 
         StringBuilder builder = new StringBuilder().append("HTTP/1.1 200 OK")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Length: 3")
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("Content-Type: text/plain")
-                                                   .append(serializer.CRLF)
-                                                   .append(serializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
+                                                   .append(ResponseSerializer.CRLF)
                                                    .append("<a href=\"/file1\">file1</a>");
 
-        assertEquals(builder.toString(), serializer.serialize(response));
-
+        assertEquals(builder.toString(), Converter.bytesToString(ResponseSerializer.serialize(response)));
     }
 }

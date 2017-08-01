@@ -1,9 +1,10 @@
 package com.portatlas;
 
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.response.Response;
-import com.portatlas.response.StatusCodes;
+import com.portatlas.http_response.HttpResponse;
+import com.portatlas.http_response.OkResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,23 +23,20 @@ public class RouterTest {
     @Test
     public void testGivenAValidRequestRouteRespondsWithStatus200() {
         Request request = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
-        Response response = Response.builder()
-                                    .statusCode(StatusCodes.OK)
-                                    .build();
-        router.addRoute(request, response);
-        Response routedResponse = router.route(request);
+        HttpResponse httpResponse = new OkResponse();
+        router.addRoute(request, httpResponse);
 
-        assertEquals(response, routedResponse);
-        assertEquals(response.getStatus(), routedResponse.getStatus());
+        HttpResponse routedResponse = router.route(request);
+
+        assertEquals(httpResponse.run().getStatus(), routedResponse.run().getStatus());
     }
 
     @Test
-    public void testHasRouteReturnsTrueWhenRequestExist() {
+    public void testHasRouteReturnsTrueWhenTheRequestExists() {
         Request request = new Request(RequestMethod.GET, "/anything" , HttpVersion.CURRENT_VER);
-        Response response = Response.builder()
-                                    .statusCode(StatusCodes.OK)
-                                    .build();
-        router.addRoute(request, response);
+        HttpResponse httpResponse = new OkResponse();
+
+        router.addRoute(request, httpResponse);
 
         assertTrue(router.hasRoute(request));
     }

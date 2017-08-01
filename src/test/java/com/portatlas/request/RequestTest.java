@@ -1,6 +1,7 @@
 package com.portatlas.request;
 
-import com.portatlas.HttpVersion;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,16 +62,23 @@ public class RequestTest {
 
     @Test
     public void testHeadersCanBeAddedAndHasHeaderFieldNameHostIsTrue() {
-        request1.addHeader("Host", "en.wikipedia.org:8080");
+        request1.addHeader(HeaderName.HOST, "en.wikipedia.org:8080");
 
-        assertTrue(request1.getHeaders().containsKey("Host"));
+        assertTrue(request1.getHeaders().containsKey(HeaderName.HOST));
     }
 
     @Test
     public void testRequestHasHeaderFieldValue() {
-        request1.addHeader("Host", "en.wikipedia.org:8080");
+        request1.addHeader(HeaderName.HOST, "en.wikipedia.org:8080");
 
-        assertEquals("en.wikipedia.org:8080", request1.getHeaders().get("Host"));
+        assertEquals("en.wikipedia.org:8080", request1.getHeaders().get(HeaderName.HOST));
+    }
+
+    @Test
+    public void testRequestHasABody() {
+        request1.setBody("data");
+
+        assertEquals("data", request1.getRequestBody());
     }
 
     @Test

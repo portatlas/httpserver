@@ -1,18 +1,18 @@
 package com.portatlas;
 
 import com.portatlas.request.Request;
-import com.portatlas.response.Response;
+import com.portatlas.http_response.HttpResponse;
 
 import java.util.HashMap;
 
 public class Router {
-    public HashMap<Request, Response> routes;
+    public HashMap<Request, HttpResponse> routes;
 
     public Router() {
-        routes = new HashMap<Request, Response>();
+        routes = new HashMap<Request, HttpResponse>();
     }
 
-    public Response route(Request request) {
+    public HttpResponse route(Request request) {
         return routes.get(request);
     }
 
@@ -20,7 +20,7 @@ public class Router {
         return routes.containsKey(request);
     }
 
-    public void addRoute(Request request, Response response) {
-        routes.put(request, response);
+    public void addRoute(Request request, HttpResponse httpResponse) {
+        routes.put(request, httpResponse);
     }
 }

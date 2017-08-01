@@ -1,11 +1,12 @@
 package com.portatlas.response;
 
-import org.junit.Test;
+import com.portatlas.helpers.Converter;
+import com.portatlas.http_constants.HeaderName;
 
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ResponseBuilderTest {
-
     @Test
     public void testCreatesResponseLine() {
         Response response = Response.builder()
@@ -25,29 +26,29 @@ public class ResponseBuilderTest {
     @Test
     public void testBuildHeaders() {
         Response response = Response.builder()
-                                    .header("Content-Type", "text/plain")
+                                    .header(HeaderName.CONTENT_TYPE, "text/plain")
                                     .build();
 
-        assertEquals("text/plain", response.getHeader("Content-Type"));
+        assertEquals("text/plain", response.getHeader(HeaderName.CONTENT_TYPE));
     }
 
     @Test
     public void testBuildMultipleHeaders() {
         Response response = Response.builder()
-                                    .header("Content-Type", "text/plain")
-                                    .header("Content-Length", "10")
+                                    .header(HeaderName.CONTENT_TYPE, "text/plain")
+                                    .header(HeaderName.CONTENT_LENGTH, "10")
                                     .build();
 
-        assertEquals("text/plain", response.getHeader("Content-Type"));
-        assertEquals("10", response.getHeader("Content-Length"));
+        assertEquals("text/plain", response.getHeader(HeaderName.CONTENT_TYPE));
+        assertEquals("10", response.getHeader(HeaderName.CONTENT_LENGTH));
     }
 
     @Test
-    public void testBuildBody() {
+    public void testBuildBodyWithText() {
         Response response = Response.builder()
-                                    .body("foo content")
+                                    .body("foo content".getBytes())
                                     .build();
 
-        assertEquals("foo content", response.getBody());
+        assertEquals("foo content", Converter.bytesToString(response.getBody()));
     }
 }
