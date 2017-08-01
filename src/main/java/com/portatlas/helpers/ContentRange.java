@@ -1,18 +1,20 @@
 package com.portatlas.helpers;
 
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
 import com.portatlas.request.Request;
 
 import java.util.Arrays;
 
 public class ContentRange {
+    private static String dash = "-";
+
     public static int[] getRange(String contentRangeRequest, int lengthOfContent) {
-        String[] ranges = contentRangeRequest.split("-");
+        String[] ranges = contentRangeRequest.split(dash);
         int[] partialContentRange = new int[2];
-        if (contentRangeRequest.startsWith("-")) {
+        if (contentRangeRequest.startsWith(dash)) {
             partialContentRange[0] = lengthOfContent - Integer.parseInt(ranges[1]);
             partialContentRange[1] = lengthOfContent;
-        } else if (contentRangeRequest.endsWith("-")) {
+        } else if (contentRangeRequest.endsWith(dash)) {
             partialContentRange[0] = Integer.parseInt(ranges[0]);
             partialContentRange[1] = lengthOfContent;
         } else {

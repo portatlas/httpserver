@@ -2,11 +2,9 @@ package com.portatlas.helpers;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LogWriterTest {
-
     private LogWriter logWriter;
 
     @Before
@@ -24,5 +22,4 @@ public class LogWriterTest {
 
         assertEquals(firstLog + "\n" + secondLog + "\n", logWriter.getLogs());
     }
-
 }

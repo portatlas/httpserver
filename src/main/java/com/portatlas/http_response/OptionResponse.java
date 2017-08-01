@@ -7,7 +7,7 @@ public class OptionResponse implements HttpResponse {
     private String fieldName;
     private String fieldValue;
 
-    public OptionResponse(String fieldName, String fieldValue){
+    public OptionResponse(String fieldName, String fieldValue) {
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
     }

@@ -7,7 +7,7 @@ public class Authentication {
 
     public static String getCredentials(String authorizationValue) throws Exception {
         String credentials = "";
-        if(isValidFormat(authorizationValue)){
+        if(isValidFormat(authorizationValue)) {
             credentials = authorizationValue.substring(6);
         } else {
             throw new Exception("Invalid Auth Format");
@@ -15,8 +15,8 @@ public class Authentication {
         return credentials;
     }
 
-    public static String decodeCredentials(String authorizationValue) {
-        return new String(Base64.getDecoder().decode(authorizationValue));
+    public static String decodeCredentials(String credentials) {
+        return new String(Base64.getDecoder().decode(credentials));
     }
 
     public static boolean isValidCredentials(String authorizationValue) throws Exception {
@@ -25,17 +25,17 @@ public class Authentication {
     }
 
     public static boolean isValidFormat(String authorizationValue) {
-        if (ifValidAuthType(authorizationValue) && isValidLength(authorizationValue)) {
+        if (validAuthType(authorizationValue) && validLength(authorizationValue)) {
             return true;
         }
         return false;
     }
 
-    private static boolean ifValidAuthType(String authorizationValue) {
+    private static boolean validAuthType(String authorizationValue) {
         return getAuthType(authorizationValue).equals(authType);
     }
 
-    private static boolean isValidLength(String authorizationValue) {
+    private static boolean validLength(String authorizationValue) {
         return authorizationValue.length() == 26;
     }
 

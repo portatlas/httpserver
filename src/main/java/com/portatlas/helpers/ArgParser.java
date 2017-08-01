@@ -8,11 +8,11 @@ public class ArgParser {
     private String directoryPath = directory.pathName;
 
     public void parseArgs(String[] args) {
-        if (args.length > 0 ){
-            for(int i = 0; i < args.length; i++ ){
-                if (args[i].equals("-p")){
+        if (args.length > 0 ) {
+            for(int i = 0; i < args.length; i++ ) {
+                if (args[i].equals("-p")) {
                     port = Integer.parseInt(args[i+1]);
-                } else if (args[i].equals("-d")){
+                } else if (args[i].equals("-d")) {
                     directoryPath = args[i+1];
                 }
             }

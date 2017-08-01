@@ -1,10 +1,9 @@
 package com.portatlas.http_response;
 
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
 import com.portatlas.response.StatusCodes;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,7 +11,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import com.portatlas.test_helpers.FileHelper;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class ImageContentResponseTest {
     private ImageContentResponse jpegContentResponse;
@@ -29,24 +28,24 @@ public class ImageContentResponseTest {
     }
 
     @Test
-    public void testResponseHasStatus200() throws IOException {
+    public void testResponseHasStatus200() {
         assertEquals(StatusCodes.OK, jpegContentResponse.run().getStatus());
     }
 
     @Test
-    public void testResponseHasContentType() throws IOException{
+    public void testResponseHasContentType() {
         assertEquals("image/jpeg", jpegContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));
     }
 
     @Test
-    public void testHeaderContentTypeOfPNG() throws IOException{
+    public void testHeaderContentTypeOfPNG() {
         ImageContentResponse pngContentResponse = new ImageContentResponse(tempFolderPath, "test.png");
 
         assertEquals("image/png", pngContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));
     }
 
     @Test
-    public void testHeaderContentTypeOfGIF() throws IOException{
+    public void testHeaderContentTypeOfGIF() {
         ImageContentResponse gifContentResponse = new ImageContentResponse(tempFolderPath, "test.gif");
 
         assertEquals("image/gif", gifContentResponse.run().getHeader(HeaderName.CONTENT_TYPE));
@@ -58,6 +57,6 @@ public class ImageContentResponseTest {
         FileHelper.createTempImageFile(tempFolder);
         ImageContentResponse jpegTempContentResponse = new ImageContentResponse(tempFolderPath, "test_temp_image.jpeg");
 
-        assertTrue(Arrays.equals(image, jpegTempContentResponse.run().getBody()));
+        assertArrayEquals(image, jpegTempContentResponse.run().getBody());
     }
 }

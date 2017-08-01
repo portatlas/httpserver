@@ -1,19 +1,29 @@
 package com.portatlas.request;
 
-import com.portatlas.http_constants.HeaderName;
-import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.constants.HeaderName;
+import com.portatlas.constants.HttpVersion;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 public class RequestParserTest {
     private String requestWithoutBody = "GET / HTTP/1.1\n" +
                                         "Host: en.wikipedia.org:8080\n" +
                                         "Accept-Language: en-us,en:q=0.5\n";
+
+    private String requestWithParams = "GET /test?type=chocolate HTTP/1.1\n" +
+                                       "Host: en.wikipedia.org:8080\n" +
+                                       "Accept-Language: en-us,en:q=0.5\n";
+
+    private String encodedParams = "/parameters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F";
+    private String requestWithEncodedParams = "GET " + encodedParams + " HTTP/1.1\n" +
+                                              "Host: en.wikipedia.org:8080\n" +
+                                              "Accept-Language: en-us,en:q=0.5\n";
 
     private String requestWithBody = "POST /form HTTP/1.1\n" +
                                      "Content-Length: 11\n" +
@@ -47,6 +57,22 @@ public class RequestParserTest {
     }
 
     @Test
+    public void testRequestTargetWithParamsIsParsed() throws IOException {
+        assertEquals("/test", parseRequest(requestWithParams.getBytes()).getRequestTarget());
+    }
+
+    @Test
+    public void testParamsIsParsed() throws IOException {
+        assertEquals("type = chocolate", parseRequest(requestWithParams.getBytes()).getRequestParams());
+    }
+
+    @Test
+    public void testEncodedParamsIsParsed() throws IOException {
+        String decodedParams = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
+        assertEquals(decodedParams, parseRequest(requestWithEncodedParams.getBytes()).getRequestParams());
+    }
+
+    @Test
     public void testHTTPVersionIsParsed() throws IOException {
         assertEquals(HttpVersion.CURRENT_VER, parseRequest(requestWithoutBody.getBytes()).getHttpVersion());
     }
@@ -70,21 +96,7 @@ public class RequestParserTest {
     }
 
     @Test
-    public void testRequestHasBodyIsFalseForRequestWithOutBody() throws IOException {
-        Request request = parseRequest(requestWithoutBody.getBytes());
-
-        assertFalse(RequestParser.hasBody(request));
-    }
-
-    @Test
-    public void testRequestHasBodyIsTrueForRequestWithOutBody() throws IOException {
-        Request request = parseRequest(requestWithBody.getBytes());
-
-        assertTrue(RequestParser.hasBody(request));
-    }
-
-    @Test
-    public void testBodyIsParsed() throws Exception {
+    public void testBodyIsParsed() throws IOException {
         assertEquals("data=fatcat", parseRequest(requestWithBody.getBytes()).getRequestBody());
     }
 

@@ -16,9 +16,9 @@ public class FormResponse implements HttpResponse {
     }
 
     public Response run () {
-        String content = request.getRequestBody();
         String filePath = directory.getPathName();
         String requestTarget = request.getRequestTarget();
+        String content = request.getRequestBody();
         ResourceWriter.write(filePath + requestTarget, content);
 
         Response response = Response.builder()

@@ -35,7 +35,7 @@ public class FileReaderTest {
     }
 
     @Test
-    public void testGetContentOfFileFromFilePath() throws IOException {
+    public void testGetContentOfFileFromFilePath() {
         String expectedContent = new String("testing\n".getBytes());
         String parsedContent = new String(fileReader.getContent(tempFile.getPath()));
 
@@ -43,7 +43,7 @@ public class FileReaderTest {
     }
 
     @Test
-    public void testGetContentOfFileWhenFileDoesNotExist() throws IOException {
+    public void testGetContentOfFileWhenFileDoesNotExist() {
         String expectedContent = new String("".getBytes());
         String parsedContent = new String(fileReader.getContent(tempFolder.getRoot().getPath() + "/doesnotexist"));
 

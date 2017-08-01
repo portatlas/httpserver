@@ -26,7 +26,7 @@ public class ResourceReader {
     public static byte[] getContent(String filepath) {
         byte[] content = new byte[0];
         File targetFile = new File(filepath);
-        if (targetFile.isFile()){
+        if (targetFile.isFile()) {
             try {
                 content = Files.readAllBytes(targetFile.toPath());
             } catch (IOException e) {

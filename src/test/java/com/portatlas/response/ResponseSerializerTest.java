@@ -1,9 +1,9 @@
 package com.portatlas.response;
 
-import java.io.IOException;
-
 import com.portatlas.helpers.Converter;
-import com.portatlas.http_constants.HeaderName;
+import com.portatlas.constants.HeaderName;
+
+import java.io.IOException;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
