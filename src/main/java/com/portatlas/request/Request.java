@@ -1,7 +1,8 @@
 package com.portatlas.request;
 
+import com.portatlas.http_constants.HeaderName;
+
 import java.util.HashMap;
-import java.util.Objects;
 
 public class Request {
     private String method;
@@ -83,20 +84,15 @@ public class Request {
         return body;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(o == this) return true;
-        if (!(o instanceof Request)) {
-            return false;
-        }
-        Request request = (Request) o;
-        return Objects.equals(method, request.method) &&
-               Objects.equals(requestTarget, request.requestTarget) &&
-               Objects.equals(httpVersion, request.httpVersion);
+    public boolean isRootRequest() {
+        return getRequestTarget().equals("/");
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(method, requestTarget, httpVersion);
+    public boolean isRangeRequest() {
+        return getHeaders().containsKey(HeaderName.RANGE);
+    }
+
+    public boolean isAuthRequiredRequest() {
+        return getHeaders().containsKey(HeaderName.AUTH);
     }
 }

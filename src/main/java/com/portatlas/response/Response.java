@@ -1,5 +1,7 @@
 package com.portatlas.response;
 
+import com.portatlas.http_constants.HttpVersion;
+
 import java.util.HashMap;
 
 public class Response {
@@ -50,5 +52,9 @@ public class Response {
 
     public static ResponseBuilder builder() {
         return new ResponseBuilder();
+    }
+
+    public String getStatusLine() {
+        return HttpVersion.CURRENT_VER + " " + getStatus();
     }
 }

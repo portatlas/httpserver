@@ -1,14 +1,18 @@
 package com.portatlas;
 
-import com.portatlas.helpers.Converter;
-import com.portatlas.constants.HeaderName;
-import com.portatlas.constants.HttpVersion;
+import com.portatlas.cobspec.CobspecResources;
+import com.portatlas.handler.GetHandler;
+import com.portatlas.handler.HeadHandler;
+import com.portatlas.handler.OptionsHandler;
+import com.portatlas.handler.PostPutHandler;
+import com.portatlas.handler.PatchHandler;
+import com.portatlas.handler.DeleteHandler;
+import com.portatlas.handler.MethodNotAllowedHandler;
+import com.portatlas.http_constants.HttpVersion;
+import com.portatlas.http_constants.StatusCodes;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
-import com.portatlas.http_response.RootResponse;
-import com.portatlas.http_response.RedirectResponse;
-import com.portatlas.http_response.FormResponse;
-import com.portatlas.response.ResponseSerializer;
+import com.portatlas.response.Response;
 import com.portatlas.test_helpers.FileHelper;
 
 import java.io.IOException;
@@ -17,14 +21,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class ControllerTest {
     private Controller controller;
-    private Router router;
     private Directory directory;
-    private Request testRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    private Request getRootRequest = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    private String okResponse = "HTTP/1.1 200 OK";
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -34,81 +37,67 @@ public class ControllerTest {
         controller = new Controller();
         FileHelper.createTempFileWithContent(tempFolder);
         directory = new Directory(tempFolder.getRoot().getPath());
-        router = new Router(directory);
-        testRequest.setBody("hello");
-        router.addRoute(new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER),
-                        new RootResponse(directory.files));
-        router.addRoute(new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER),
-                        new RedirectResponse());
-        router.addRoute(new Request(RequestMethod.POST, "/form" , HttpVersion.CURRENT_VER),
-                        new FormResponse(testRequest, directory));
     }
 
     @Test
-    public void testBadAuthRequest() throws IOException {
-        Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
-        badAuthrequest.addHeader(HeaderName.AUTH, "Basic 111taW46aHVudGVyMg==");
-        StringBuilder unauthResponse = new StringBuilder();
-        unauthResponse.append("HTTP/1.1 401 Unauthorized")
-                      .append(ResponseSerializer.CRLF)
-                      .append("WWW-Authenticate: Basic");
+    public void testInvalidRequestMethodNotAllowedHandler() throws IOException {
+        Request invalidMethodRequest = new Request("boogus", CobspecResources.FORM , HttpVersion.CURRENT_VER);
 
-        assertTrue(Converter.bytesToString(controller.handleRequest(badAuthrequest, router, directory)).contains(unauthResponse.toString()));
+        assertEquals(new MethodNotAllowedHandler().getClass(), controller.routeToHandler(invalidMethodRequest, directory).getClass());
     }
 
     @Test
-    public void testGoodAuthRequestReturnsResponse() throws IOException {
-        Request badAuthrequest = new Request(RequestMethod.GET, "/logs", HttpVersion.CURRENT_VER);
-        badAuthrequest.addHeader(HeaderName.AUTH, "Basic YWRtaW46aHVudGVyMg==");
-        StringBuilder authResponse = new StringBuilder();
-        authResponse.append("HTTP/1.1 200 OK")
-                    .append(ResponseSerializer.CRLF)
-                    .append("WWW-Authenticate: Basic");
-
-        assertTrue(Converter.bytesToString(controller.handleRequest(badAuthrequest, router, directory)).contains(authResponse.toString()));
+    public void testValidGetRequestReturnsGetHandler() throws IOException {
+        assertEquals(new GetHandler(getRootRequest, directory).getClass(), controller.routeToHandler(getRootRequest, directory).getClass());
     }
 
     @Test
-    public void testGetRootReturnsResponse() throws IOException {
-        StringBuilder responseWithStatusOK = new StringBuilder();
-        responseWithStatusOK.append("HTTP/1.1 200 OK")
-                            .append(ResponseSerializer.CRLF);
+    public void testValidHeadRequestReturnsHeadHandler() throws IOException {
+        Request headRootRequest = new Request(RequestMethod.HEAD, "/" , HttpVersion.CURRENT_VER);
 
-        assertTrue(Converter.bytesToString(controller.handleRequest(testRequest, router, directory)).contains(responseWithStatusOK.toString()));
+        assertEquals(new HeadHandler(headRootRequest).getClass(), controller.routeToHandler(headRootRequest, directory).getClass());
     }
 
     @Test
-    public void testGetRootRedirectReturnsResponse() throws IOException {
-        Request getRootRedirectRequest = new Request(RequestMethod.GET, "/redirect" , HttpVersion.CURRENT_VER);
+    public void testValidOptionsRequestReturnsOptionsHandler() throws IOException {
+        Request optionsRequest = new Request(RequestMethod.OPTIONS, "/method_options2" , HttpVersion.CURRENT_VER);
 
-        StringBuilder responseWithStatusFound = new StringBuilder();
-        responseWithStatusFound.append("HTTP/1.1 302 Found")
-                               .append(ResponseSerializer.CRLF)
-                               .append("Location: /")
-                               .append(ResponseSerializer.CRLF);
-
-        assertEquals(responseWithStatusFound.toString(), Converter.bytesToString(controller.handleRequest(getRootRedirectRequest, router, directory)));
+        assertEquals(new OptionsHandler(optionsRequest).getClass(), controller.routeToHandler(optionsRequest, directory).getClass());
     }
 
     @Test
-    public void testHeadFoobarRequestReturnsResponse() throws IOException {
-        Request getHeadFoobarRequest = new Request(RequestMethod.HEAD, "/foobar" , HttpVersion.CURRENT_VER);
+    public void testValidPostRequestReturnsPostPutHandler() throws IOException {
+        Request postRequest = new Request(RequestMethod.POST, CobspecResources.FORM , HttpVersion.CURRENT_VER);
 
-        StringBuilder responseWithStatusNotFound = new StringBuilder();
-        responseWithStatusNotFound.append("HTTP/1.1 404 Not Found")
-                                  .append(ResponseSerializer.CRLF);
-
-        assertEquals(responseWithStatusNotFound.toString(), Converter.bytesToString(controller.handleRequest(getHeadFoobarRequest, router, directory)));
+        assertEquals(new PostPutHandler(postRequest, directory).getClass(), controller.routeToHandler(postRequest, directory).getClass());
     }
 
     @Test
-    public void testPutFileRequestReturnsResponse() throws IOException {
-        Request putFileRequest = new Request(RequestMethod.PUT, "/test_temp_file" , HttpVersion.CURRENT_VER);
+    public void testValidPutRequestReturnsPostPutHandler() throws IOException {
+        Request postRequest = new Request(RequestMethod.PUT, CobspecResources.FORM , HttpVersion.CURRENT_VER);
 
-        StringBuilder responseWithStatusNotAllowed = new StringBuilder();
-        responseWithStatusNotAllowed.append("HTTP/1.1 405 Method Not Allowed")
-                                    .append(ResponseSerializer.CRLF);
+        assertEquals(new PostPutHandler(postRequest, directory).getClass(), controller.routeToHandler(postRequest, directory).getClass());
+    }
 
-        assertEquals(responseWithStatusNotAllowed.toString(), Converter.bytesToString(controller.handleRequest(putFileRequest, router, directory)));
+    @Test
+    public void testValidPatchtRequestReturnsPatchHandler() throws IOException {
+        Request patchRequest = new Request(RequestMethod.PATCH, CobspecResources.FORM , HttpVersion.CURRENT_VER);
+
+        assertEquals(new PatchHandler(patchRequest, directory).getClass(), controller.routeToHandler(patchRequest, directory).getClass());
+    }
+
+    @Test
+    public void testValidDeleteRequestReturnsDeleteHandler() throws IOException {
+        Request deleteRequest = new Request(RequestMethod.DELETE, CobspecResources.FORM , HttpVersion.CURRENT_VER);
+
+        assertEquals(new DeleteHandler(deleteRequest, directory).getClass(), controller.routeToHandler(deleteRequest, directory).getClass());
+    }
+
+    @Test
+    public void testProcessRequestReturnsResponse() throws IOException {
+        Response response = Response.builder()
+                                    .statusCode(StatusCodes.OK)
+                                    .build();
+        assertEquals(response.getClass(), controller.processRequest(getRootRequest, directory).getClass());
     }
 }

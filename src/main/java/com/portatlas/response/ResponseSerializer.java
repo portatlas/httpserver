@@ -1,6 +1,6 @@
 package com.portatlas.response;
 
-import com.portatlas.constants.HttpVersion;
+import com.portatlas.http_constants.HttpVersion;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

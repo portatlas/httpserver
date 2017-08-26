@@ -1,8 +1,9 @@
 package com.portatlas.request;
 
-import com.portatlas.helpers.LogWriter;
-import com.portatlas.helpers.ParameterDecoder;
-import com.portatlas.constants.HeaderName;
+import com.portatlas.helpers.writers.ConsoleWriter;
+import com.portatlas.helpers.writers.EndpointWriter;
+import com.portatlas.helpers.http_helpers.ParameterDecoder;
+import com.portatlas.http_constants.HeaderName;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,15 +13,18 @@ import java.io.UnsupportedEncodingException;
 
 public class RequestParser {
     private static Request request;
-    public static LogWriter logWriter = new LogWriter();
+    public static EndpointWriter logWriter = new EndpointWriter();
+    private static String requestFirstLine;
 
     public static Request parseRequest(InputStream inputStream) throws IOException {
         BufferedReader requestReader = new BufferedReader(new InputStreamReader(inputStream));
-        parseRequestLine(requestReader);
-        String headersLine = extractHeaders(requestReader);
-        parseHeaders(request, headersLine);
-        if (hasBody(request)) {
-            parseBody(requestReader, request);
+        if ((requestFirstLine = requestReader.readLine()) != null ){
+            parseRequestLine(requestReader);
+            String headersLine = extractHeaders(requestReader);
+            parseHeaders(request, headersLine);
+            if (hasBody(request)) {
+                request.setBody(parseBody(requestReader, request));
+            }
         }
         return request;
     }
@@ -29,11 +33,10 @@ public class RequestParser {
         int httpMethod = 0;
         int requestURI = 1;
         int httpVersion = 2;
-        String requestFirstLine = requestReader.readLine();
-        logWriter.logMessage(requestFirstLine);
+        logWriter.appendToMessage(requestFirstLine);
         String[] requestLine = splitRequestLine(requestFirstLine);
         if (hasParams(requestLine[requestURI])) {
-            buildRequestWithParams(requestLine[httpMethod], requestLine[requestURI], requestLine[httpVersion]);
+            request = buildRequestWithParams(requestLine[httpMethod], requestLine[requestURI], requestLine[httpVersion]);
         } else {
             request = new Request(requestLine[httpMethod], requestLine[requestURI], requestLine[httpVersion]);
         }
@@ -58,25 +61,26 @@ public class RequestParser {
         }
     }
 
-    public static void parseBody(BufferedReader requestReader, Request request) throws IOException {
+    public static String parseBody(BufferedReader requestReader, Request request) throws IOException {
         int contentLength = Integer.parseInt(request.getHeaders().get(HeaderName.CONTENT_LENGTH));
         char[] body = new char[contentLength];
         requestReader.read(body, 0, contentLength);
         String bodyString = new String(body);
-        request.setBody(bodyString);
+        return bodyString;
     }
 
     private static boolean hasParams(String string) {
         return string.contains("?");
     }
 
-    private static void buildRequestWithParams(String method, String requestURI, String httpVersion) throws UnsupportedEncodingException {
+    private static Request buildRequestWithParams(String method, String requestURI, String httpVersion) throws UnsupportedEncodingException {
         int paramsIndex = requestURI.indexOf("?");
         String resource = requestURI.substring(0, paramsIndex);
         String queryString = requestURI.substring(paramsIndex + 1);
         String decodedParams = ParameterDecoder.decode(queryString);
-        logWriter.logMessage(decodedParams);
-        request = new Request(method, resource, decodedParams, httpVersion);
+        ConsoleWriter.write(decodedParams);
+        logWriter.appendToMessage(decodedParams);
+        return new Request(method, resource, decodedParams, httpVersion);
     }
 
     private static boolean hasBody(Request request) {

@@ -1,5 +1,7 @@
 package com.portatlas.response;
 
+import com.portatlas.http_constants.StatusCodes;
+
 import java.util.HashMap;
 import java.util.Map;
 

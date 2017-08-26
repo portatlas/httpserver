@@ -4,8 +4,7 @@ import java.util.Formatter;
 
 public class Converter {
     public static String bytesToString(byte[] bytes) {
-        String convertedString = new String(bytes);
-        return convertedString;
+        return new String(bytes);
     }
 
     public static String bytesToHex(byte[] hash) {

@@ -9,6 +9,7 @@ public class Directory {
 
     public Directory() {
         this.pathName = System.getProperty("user.dir") + "/public/";
+        this.files = listFilesForFolder(new File(pathName));
     }
 
     public Directory(String directoryPath) {
@@ -24,7 +25,7 @@ public class Directory {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
-            } else {
+            } else if(!hasFile(fileEntry.getName())){
                 files.add(fileEntry.getName());
             }
         }

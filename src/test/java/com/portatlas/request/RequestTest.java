@@ -1,12 +1,14 @@
 package com.portatlas.request;
 
-import com.portatlas.constants.HeaderName;
-import com.portatlas.constants.HttpVersion;
+import com.portatlas.cobspec.CobspecResources;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class RequestTest {
     private String chocolateCookie = "type=chocolate";
@@ -96,23 +98,44 @@ public class RequestTest {
     }
 
     @Test
-    public void testOverrideEqualsForRequest() {
-        Request request2 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
-
-        assertEquals(request1, request2);
+    public void testIsRootRequestReturnsTrueIfRequestIsForRoot() {
+        assertTrue(request1.isRootRequest());
     }
 
     @Test
-    public void testOverrideEqualsForMethodAndRequestTargetAndHTTPVersion() {
-        assertEquals(RequestMethod.GET, request1.getMethod() );
-        assertEquals("/", request1.getRequestTarget() );
-        assertEquals(HttpVersion.CURRENT_VER, request1.getHttpVersion() );
+    public void testIsRootRequestReturnsFalseIfRequestIsNotForRoot() {
+        Request foobarRequest = new Request(RequestMethod.GET, "/foobar", HttpVersion.CURRENT_VER);
+
+        assertFalse(foobarRequest.isRootRequest());
     }
 
     @Test
-    public void testOverideHashCodeForRequest() {
-        Request request2 = new Request(RequestMethod.GET, "/" , HttpVersion.CURRENT_VER);
+    public void testIsRangeRequestReturnsTrueIfRequestIsForPartialContent() {
+        Request foobarRequest = new Request(RequestMethod.GET, "/foobar", HttpVersion.CURRENT_VER);
+        foobarRequest.addHeader(HeaderName.RANGE, "bytes=0-7");
 
-        assertEquals(request1.hashCode(), request2.hashCode());
+        assertTrue(foobarRequest.isRangeRequest());
+    }
+
+    @Test
+    public void testIsRangeRequestReturnsFalseIfRequestIsNotForPartialContent() {
+        Request foobarRequest = new Request(RequestMethod.GET, "/foobar", HttpVersion.CURRENT_VER);
+
+        assertFalse(foobarRequest.isRangeRequest());
+    }
+
+    @Test
+    public void testIsAuthRequiredRequestReturnsTrueIfRequestNeedsToBeAuth() {
+        Request authRequest = new Request(RequestMethod.GET, CobspecResources.LOGS, HttpVersion.CURRENT_VER);
+        authRequest.addHeader(HeaderName.AUTH, "Basic YWRtaW46aHVudGVyMg==");
+
+        assertTrue(authRequest.isAuthRequiredRequest());
+    }
+
+    @Test
+    public void testIsAuthRequiredRequestReturnsFalseIfRequestDoesNotNeedToBeAuth() {
+        Request notAuthRequest = new Request(RequestMethod.GET, "/foobar", HttpVersion.CURRENT_VER);
+
+        assertFalse(notAuthRequest.isAuthRequiredRequest());
     }
 }
