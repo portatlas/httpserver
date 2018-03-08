@@ -1,7 +1,7 @@
 package com.portatlas.request;
 
-import com.portatlas.constants.HeaderName;
-import com.portatlas.constants.HttpVersion;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 
 import java.io.IOException;
 import java.io.ByteArrayInputStream;

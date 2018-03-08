@@ -1,52 +1,43 @@
 package com.portatlas;
 
-import com.portatlas.constants.HeaderName;
-import com.portatlas.helpers.Authentication;
-import com.portatlas.http_response.HttpResponse;
-import com.portatlas.http_response.MethodNotAllowedResponse;
-import com.portatlas.http_response.NotFoundResponse;
-import com.portatlas.http_response.LogResponse;
-import com.portatlas.http_response.UnauthorizedResponse;
+import com.portatlas.handler.Handler;
+import com.portatlas.handler.GetHandler;
+import com.portatlas.handler.HeadHandler;
+import com.portatlas.handler.OptionsHandler;
+import com.portatlas.handler.PostPutHandler;
+import com.portatlas.handler.PatchHandler;
+import com.portatlas.handler.DeleteHandler;
+import com.portatlas.handler.MethodNotAllowedHandler;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.response.Response;
-import com.portatlas.response.ResponseSerializer;
 
 import java.io.IOException;
 
 public class Controller {
-    private static HttpResponse httpResponse;
 
-    public static byte[] handleRequest(Request request, Router router, Directory directory) throws IOException {
-        router.addDynamicRoutes(directory, request);
-        if (isAuthorizedRequest(request)) {
-            verifyCredentials(request);
-        } else if (router.hasRoute(request)) {
-            httpResponse = router.route(request);
-        } else if (isUnsupportedMethodRequest(request, directory)) {
-            httpResponse = new MethodNotAllowedResponse();
-        } else {
-            httpResponse = new NotFoundResponse();
+    public static Handler routeToHandler(Request request, Directory directory) throws IOException {
+        Handler requestHandler = new MethodNotAllowedHandler();
+        switch (request.getMethod()) {
+            case RequestMethod.GET:
+                return new GetHandler(request, directory);
+            case RequestMethod.HEAD:
+                return new HeadHandler(request);
+            case RequestMethod.OPTIONS:
+                return new OptionsHandler(request);
+            case RequestMethod.POST:
+                return new PostPutHandler(request, directory);
+            case RequestMethod.PUT:
+                return new PostPutHandler(request, directory);
+            case RequestMethod.PATCH:
+                return new PatchHandler(request, directory);
+            case RequestMethod.DELETE:
+                return new DeleteHandler(request, directory);
         }
-        Response response = httpResponse.run();
-        byte[] responseBytes = ResponseSerializer.serialize(response);
-        return responseBytes;
+        return requestHandler;
     }
 
-    private static boolean isAuthorizedRequest(Request request) {
-        return request.getHeaders().containsKey(HeaderName.AUTH) && request.getResource().equals("logs");
-    }
-
-    private static void verifyCredentials(Request request) {
-        String credentials = request.getHeaders().get(HeaderName.AUTH);
-        try {
-            httpResponse = Authentication.isValidCredentials(credentials) ? new LogResponse(request) : new UnauthorizedResponse();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static boolean isUnsupportedMethodRequest(Request request, Directory directory) {
-        return directory.hasFile(request.getResource()) && !request.getMethod().equals(RequestMethod.GET);
+    public static Response processRequest(Request request, Directory directory) throws IOException {
+        return routeToHandler(request, directory).run();
     }
 }

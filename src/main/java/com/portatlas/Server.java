@@ -1,17 +1,14 @@
 package com.portatlas;
 
-import com.portatlas.helpers.ArgParser;
+import com.portatlas.helpers.parser.ArgParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server {
-    private static ArgParser argParser = new ArgParser();
-    private static Directory directory = new Directory(argParser.getDirectoryPath());
-    private static Router router = new Router(directory);
+    private static Directory directory;
 
     public static void main(String[] args) throws IOException {
-        router.addStaticRoutes();
         ServerSocket serverSocket = configureServer(args);
         try {
             while(true) {
@@ -22,17 +19,16 @@ public class Server {
         }
     }
 
-    public static ClientThread createClientThread(ServerSocket serverSocket) throws IOException {
-        return new ClientThread(serverSocket.accept(), router, directory);
+    protected static ClientThread createClientThread(ServerSocket serverSocket) throws IOException {
+        return new ClientThread(serverSocket.accept(), directory);
     }
 
-    public static ServerSocket configureServer(String[] args) throws IOException {
-        argParser.parseArgs(args);
-        argParser.printArgs(argParser.getPort(), argParser.getDirectoryPath());
-        return new ServerSocket(argParser.getPort());
+    protected static ServerSocket configureServer(String[] args) throws IOException {
+        directory = new Directory(ArgParser.getDirectoryPath(args));
+        return new ServerSocket(Integer.parseInt(ArgParser.getPort(args)));
     }
 
-    public static void closeServerSocket(ServerSocket serverSocket) throws IOException {
+    protected static void closeServerSocket(ServerSocket serverSocket) throws IOException {
         serverSocket.close();
     }
 }

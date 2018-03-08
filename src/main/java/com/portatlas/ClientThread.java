@@ -1,35 +1,34 @@
 package com.portatlas;
 
-import com.portatlas.helpers.Converter;
+import com.portatlas.helpers.writers.ConsoleWriter;
 import com.portatlas.request.Request;
 import com.portatlas.request.RequestParser;
+import com.portatlas.response.Response;
+import com.portatlas.response.ResponseSerializer;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.IOException;
+import java.io.DataOutputStream;
 import java.net.Socket;
 
 public class ClientThread extends Thread {
     private Socket socket;
     private Directory directory;
-    private Router router;
 
-    public ClientThread(Socket socket, Router router, Directory directory) {
+    public ClientThread(Socket socket, Directory directory) {
         this.socket = socket;
         this.directory = directory;
-        this.router = router;
     }
 
     public void run() {
         try {
             InputStream requestInputStream = socket.getInputStream();
             Request request = buildRequestFromInputStream(requestInputStream);
-            byte[] httpResponse = Controller.handleRequest(request, router, directory);
-            OutputStream outPutStream = socket.getOutputStream();
-            returnResponseToOutputStream(httpResponse, outPutStream);
-            System.out.println(Converter.bytesToString(httpResponse));
-        } catch (IOException e) {
+            Response response = Controller.processRequest(request, directory);
+            returnResponseToOutputStream(ResponseSerializer.serialize(response), socket.getOutputStream());
+            ConsoleWriter.write(response.getStatusLine());
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeSocket(socket);

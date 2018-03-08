@@ -1,7 +1,7 @@
 package com.portatlas.response;
 
-import com.portatlas.constants.HeaderName;
-import com.portatlas.constants.HttpVersion;
+import com.portatlas.http_constants.HeaderName;
+import com.portatlas.http_constants.HttpVersion;
 import com.portatlas.helpers.Converter;
 
 import org.junit.Before;
@@ -50,5 +50,13 @@ public class ResponseTest {
     @Test
     public void testGetBodyWhenNull() {
         assertEquals(null, response.getBody());
+    }
+
+    @Test
+    public void testGetResponseStatusLine() {
+        response.setStatus("200 OK");
+
+        assertEquals("HTTP/1.1 200 OK", response.getStatusLine());
+
     }
 }

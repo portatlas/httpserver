@@ -1,53 +1,55 @@
 package com.portatlas;
 
-import com.portatlas.constants.HttpVersion;
-import com.portatlas.request.Request;
 import com.portatlas.request.RequestMethod;
 import com.portatlas.mocks.MockSocket;
 
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ClientThreadTest {
     private Socket socket;
     private Directory directory;
-    private Router router;
     private ClientThread clientThread;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp() throws IOException {
         socket = new MockSocket();
         directory = new Directory();
-        router = new Router(directory);
-        clientThread = new ClientThread(socket, router, directory);
+        clientThread = new ClientThread(socket, directory);
     }
+
     @Test
     public void testClientThreadRuns() {
         System.setOut(new PrintStream(outContent));
         clientThread.run();
 
-        assertTrue(outContent.toString().contains("HTTP/1.1 404 Not Found"));
+        assertEquals("HTTP/1.1 404 Not Found\n", outContent.toString());
     }
 
     @Test
-    public void testBuildRequestFromInputStream() throws IOException {
+    public void testBuildRequestFromInputStream() throws Exception {
         String sampleRequest = "GET / HTTP/1.1\r\nHost: en.wikipedia.org:8080\nAccept-Language: en-us,en:q=0.5\n";
         ByteArrayInputStream sampleRequestInputStream = new ByteArrayInputStream(sampleRequest.getBytes());
         InputStream requestInputStream = sampleRequestInputStream;
 
-        Request request = new Request(RequestMethod.GET, "/", HttpVersion.CURRENT_VER);
-        assertEquals(request, clientThread.buildRequestFromInputStream(requestInputStream));
+        assertEquals(RequestMethod.GET, clientThread.buildRequestFromInputStream(requestInputStream).getMethod());
+        assertEquals("/", clientThread.buildRequestFromInputStream(requestInputStream).getRequestTarget());
     }
 
     @Test
